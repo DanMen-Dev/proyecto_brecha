@@ -1,0 +1,17 @@
+<div class="container mt-5 text-center">
+    <div class="card shadow-lg p-4 mx-auto" style="max-width: 400px; border-radius: 20px;">
+        <h4 class="fw-bold mb-4">Actualizar Mercado</h4>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label small fw-bold">TASA BCV</label>
+                <input type="number" step="0.0001" name="bcv" class="form-control form-control-lg text-center" placeholder="Ej: 501.20" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">TASA BINANCE</label>
+                <input type="number" step="0.0001" name="binance" class="form-control form-control-lg text-center" placeholder="Ej: 660.00" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold py-3">Publicar Tasas</button>
+        </form>
+    </div>
+</div>

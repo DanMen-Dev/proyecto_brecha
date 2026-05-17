@@ -1,0 +1,15 @@
+asgiref==3.11.1
+charset-normalizer==3.4.7
+distlib==0.4.0
+Django==6.0.5
+filelock==3.20.0
+numpy==2.4.4
+pandas==3.0.3
+pillow==12.2.0
+platformdirs==4.5.0
+python-dateutil==2.9.0.post0
+reportlab==4.5.1
+six==1.17.0
+sqlparse==0.5.5
+tzdata==2026.2
+virtualenv==20.34.0

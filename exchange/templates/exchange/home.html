@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>BrechaCero | Blindaje Financiero</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        :root { --primary-dark: #1a237e; --accent: #ffd600; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .hero { 
+            background: linear-gradient(rgba(26, 35, 126, 0.9), rgba(13, 71, 161, 0.8)), 
+                        url('https://unsplash.com');
+            background-size: cover; background-position: center;
+            color: white; padding: 100px 0;
+        }
+        .feature-icon { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 1rem; }
+        .card-plan { border-radius: 15px; transition: 0.3s; border: 1px solid #eee; }
+        .card-plan:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+ <!-- Navbar Premium para la Home (Sin Redundancias) -->
+    <nav style="background-color: #111111; padding: 15px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: 'Segoe UI', Tahoma, sans-serif;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px;">
+            
+            <!-- Lado Izquierdo: Marca e Identidad -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="#" style="font-size: 1.35em; font-weight: 800; color: #ffffff; text-decoration: none; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;">
+                    <span>🚀 BRECHA CERO</span>
+                </a>
+                <span style="background-color: #ffc107; color: #212529; font-size: 0.65em; padding: 3px 8px; border-radius: 50px; font-weight: bold; font-family: monospace;">V.2.1</span>
+            </div>
+
+            <!-- Centro: Menú Informativo Limpio (Sin Duplicaciones del Software) -->
+            <div style="display: flex; align-items: center; gap: 25px; margin-right: auto; margin-left: 35px;">
+                <a href="#" style="color: #ffffff; text-decoration: none; font-size: 0.9rem; font-weight: 600;">Inicio</a>
+                
+                <!-- Enlaces estáticos del plan de negocios para la Landing Page -->
+                <a href="#features" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: 0.2s;">Tecnología G15</a>
+                <a href="#planes" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: 0.2s;">SaaS Planes Pro</a>
+                <a href="#nosotros" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: default;" title="Próximamente">Sobre Nosotros</a>
+            </div>
+
+            <!-- Lado Derecho Extremo: Acciones de Control Concentradas -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                {% if user.is_authenticated %}
+                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-right: 5px;">
+                        Operador: <strong style="color: #ffffff;">{{ user.username }}</strong>
+                    </span>
+                    <!-- Los botones de la app se consolidan únicamente aquí -->
+                    <a href="{% url 'dashboard' %}" style="background-color: #ffc107; color: #212529; font-weight: bold; border: none; padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                        Ir al Dashboard
+                    </a>
+                    <a href="{% url 'precios' %}" style="background-color: #ffc107; color: #212529; font-weight: bold; border: none; padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                        Lista Precios Web
+                    </a>                    
+                    <form action="{% url 'logout' %}" method="post" style="margin: 0; display: inline-block;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: #ffffff; padding: 7px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;">
+                            Cerrar Sesión 🚪
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: #ffffff; padding: 7px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: 0.2s;">
+                        Ingresar
+                    </a>
+                    <a href="{% url 'register' %}" style="background-color: #ffc107; color: #212529; font-weight: bold; border: none; padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                        Registrarse Gratis
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Hero Section Conectada al Sistema -->
+    <header class="hero text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-4">No pierdas dinero por la Brecha Cambiaria</h1>
+            <p class="lead mb-5 px-md-5">La primera plataforma en Venezuela que usa <strong>Inteligencia de Datos y Regresión Lineal</strong> para proteger tu inventario y calcular precios Cashea a 42 días.</p>
+            
+            <!-- ENLACES DINÁMICOS INTELIGENTES (EMBUDO DE VENTAS) -->
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                
+                {% if user.is_authenticated %}
+                    <!-- Caso A: El usuario ya inició sesión -> Va directo a trabajar -->
+                    <a href="{% url 'dashboard' %}" class="btn btn-warning btn-lg px-5 fw-bold rounded-pill" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                        🎯 Abrir Calculadora Dinámica
+                    </a>
+                    <a href="{% url 'precios' %}" class="btn btn-outline-light btn-lg px-5 rounded-pill" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                        Monitor de Lista Web
+                    </a>
+                    
+                {% else %}
+                    <!-- Caso B: El usuario es un visitante nuevo -> Lo forzamos a registrarse para captar el lead -->
+                    <a href="{% url 'register' %}" class="btn btn-warning btn-lg px-5 fw-bold rounded-pill shadow" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                        🚀 Probar Calculadora (Registro Gratis)
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-5 rounded-pill" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                        🔑 Ingresar al Sistema
+                    </a>
+                {% endif %}
+                
+            </div>
+        </div>
+    </header>
+
+    <!-- Tasa Hoy (Data Pública) -->
+    <section class="py-5 bg-light border-bottom">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="p-3 bg-white shadow-sm rounded-4">
+                        <span class="text-muted small d-block">TASA BCV OFICIAL HOY</span>
+                        <h2 class="fw-bold text-primary">Bs. {{ tasa_hoy.bcv_rate }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="py-5 container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">¿Por qué usar nuestro algoritmo?</h2>
+        </div>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="feature-icon">📈</div>
+                <h4>Predicción Real</h4>
+                <p class="text-muted">No adivines. Usamos mínimos cuadrados para proyectar el valor del Bolívar en tus días de cobro.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon">🛡️</div>
+                <h4>Blindaje Cashea</h4>
+                <p class="text-muted">Calculamos el recargo exacto de IGTF y cobertura cambiaria para tus ventas a cuotas.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon">📄</div>
+                <h4>Listas en PDF</h4>
+                <p class="text-muted">Genera y descarga tu lista de precios actualizada en un segundo, lista para imprimir.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planes (SaaS Monetización) -->
+    <section id="planes" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5">Escoge tu nivel de protección</h2>
+            <div class="row g-4 justify-content-center">
+                <!-- Plan Gratis -->
+                <div class="col-md-4">
+                    <div class="card card-plan h-100 p-4 text-center">
+                        <h3 class="fw-bold">Gratis</h3>
+                        <p class="text-muted">Para emprendedores</p>
+                        <h2 class="my-4">$0 <small class="text-muted">/ mes</small></h2>
+                        <ul class="list-unstyled mb-4 text-start">
+                            <li>✅ Calculadora a 14 días</li>
+                            <li>✅ Histórico de tasas</li>
+                            <li>❌ Carga de inventario</li>
+                            <li>❌ Exportar PDF</li>
+                        </ul>
+                        <a href="{% url 'register' %}" class="btn btn-dark w-100">Empezar Ya</a>
+                    </div>
+                </div>
+                <!-- Plan Pro -->
+                <div class="col-md-4">
+                    <div class="card card-plan h-100 p-4 text-center border-primary" style="background: #e8f0fe;">
+                        <h3 class="fw-bold">Pro</h3>
+                        <p class="text-muted">Para ferreterías y tiendas</p>
+                        <h2 class="my-4 text-primary">$19.99 <small class="text-muted">/ mes</small></h2>
+                        <ul class="list-unstyled mb-4 text-start">
+                            <li>✅ Todo lo de Gratis</li>
+                            <li>✅ <strong>Calculadora 42 días</strong></li>
+                            <li>✅ <strong>Carga Masiva de CSV</strong></li>
+                            <li>✅ <strong>Listas de Precios PDF</strong></li>
+                        </ul>
+                        <a href="#" class="btn btn-primary w-100 shadow">Suscribirse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-dark text-white text-center">
+        <p class="mb-0">© 2026 HierroEnLinea. Ingeniería Financiera para el Comercio Venezolano.</p>
+    </footer>
+
+</body>
+</html>

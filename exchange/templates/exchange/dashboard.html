@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Estratégico - BrechaCero</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; padding-top: 50px; }
+        
+        /* 1. Ensanchamos el contenedor principal */
+        .container-app { 
+            max-width: 1400px; /* Más espacio horizontal */
+            margin: 0 auto; 
+            padding: 0 40px; 
+        }
+        
+        .card { border-radius: 20px; border: none; transition: 0.3s; }
+        
+        /* 2. Mayor separación vertical entre secciones */
+        .section-spacer { margin-bottom: 60px; }
+
+        .header-custom { 
+            background: linear-gradient(135deg, #1a237e, #0d47a1); 
+            color: white; 
+            border-radius: 20px 20px 0 0; 
+            padding: 30px !important; /* Más aire en el título de la calculadora */
+        }
+
+        /* 3. Espaciado interno de la calculadora */
+        .calculator-body { padding: 50px !important; }
+
+        .table-container { 
+            background: white; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+        }
+
+        /* Estilo para los números proyectados */
+        .stat-box {
+            padding: 25px 10px;
+            border-right: 1px solid #eee;
+        }
+        .stat-box:last-child { border-right: none; }
+         body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; padding-top: 30px; }
+        
+        /* 1. Ensanchamos el contenedor principal */
+        .container-app { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 40px; 
+        }
+        
+        .card { border-radius: 20px; border: none; transition: 0.3s; }
+        .section-spacer { margin-bottom: 60px; }
+
+        /* Estilo Unificado de Identidad de Marca */
+        .brand-header {
+            background: linear-gradient(135deg, #1a237e, #0d47a1); 
+            color: white; 
+            border-radius: 20px; 
+            padding: 30px 40px;
+            box-shadow: 0 10px 25px rgba(26, 35, 126, 0.15);
+        }
+
+        /* Insignia Dinámica Integrada (Espejo de la Lista Web) */
+        .tasa-badge-premium {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.95em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Botones de acción controlados */
+        .btn-custom-action {
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 10px 24px;
+            transition: all 0.2s ease;
+        }
+        .btn-custom-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header-custom { 
+            background: linear-gradient(135deg, #1a237e, #0d47a1); 
+            color: white; 
+            border-radius: 20px 20px 0 0; 
+            padding: 30px !important; 
+        }
+
+        .calculator-body { padding: 50px !important; }
+
+        .table-container { 
+            background: white; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+        }
+
+        .stat-box {
+            padding: 25px 10px;
+            border-right: 1px solid #eee;
+        }
+        .stat-box:last-child { border-right: none; }
+
+        .modal { display: none; }
+
+        .modal.show { display: block; }       
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container-app">
+
+        <!-- 1. HEADER DE ESTADO PREMIUM (FUERZA BRUTA CSS HORIZONTAL) -->
+        <div class="brand-header" style="display: flex; justify-content: space-between; align-items: center; gap: 20px; mb-5; padding: 30px 40px; background: linear-gradient(135deg, #1a237e, #0d47a1); border-radius: 20px; box-shadow: 0 10px 25px rgba(26, 35, 126, 0.15); margin-bottom: 3rem;">
+            
+            <!-- Lado Izquierdo Fijo: Branding -->
+            <div style="flex: 1; text-align: left;">
+                <div class="d-flex align-items-center gap-2 mb-1" style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 2em; font-weight: 800; letter-spacing: 1px; color: #ffffff; white-space: nowrap;">🚀 BRECHA CERO</span>
+                    <span class="badge bg-warning text-dark fw-bold rounded-pill" style="font-size: 0.8em; padding: 4px 10px; background-color: #ffc107; color: #212529; border-radius: 50px; font-weight: bold;">V.2.1</span>
+                </div>
+                <p style="font-size: 0.95em; letter-spacing: 0.5px; color: rgba(255,255,255,0.7); margin: 0;">
+                    Panel de Inteligencia Cambiaria & Ingeniería Predictiva
+                </p>
+            </div>
+
+            <!-- Lado Derecho Fijo: Forzado al extremo opuesto mediante Flexbox -->
+            <div style="display: flex; align-items: center; gap: 15px; justify-content: flex-end;">
+                
+                <!-- El Badge unificado de paridad -->
+                <div class="tasa-badge-premium shadow-sm">
+                    <span>🏛️ BCV Hoy: <b>Bs. {{ tasa_actual.bcv_rate|floatformat:2 }}</b></span>
+                    <span style="opacity: 0.5;">|</span>
+                    <span>📉 G15 Histórico: <b>{{ proy.b_bcv|default:"0.9659"|floatformat:4 }}</b></span>
+                </div>
+                {% if user.is_authenticated %}
+                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-right: 5px;">
+                        Operador: <strong style="color: #ffffff;">{{ user.username }}</strong>
+                    </span>
+                {% endif %}    
+
+                <!-- REGRESAR AL HOME (Botón auxiliar de apoyo a la navegación) -->
+                <a href="{% url 'home' %}" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                    🏠 Inicio
+                </a>    
+                <!-- CERRAR SESIÓN (Botón Translúcido Alineado Coherente) -->
+                <form action="{% url 'logout' %}" method="post" style="margin: 0; display: inline-block;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center justify-content-center gap-2" title="Cerrar Sesión Avanzada" style="font-weight: 700; font-size: 0.85em; height: 44px; width: 140px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; border-radius: 50px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span>Cerrar Sesión</span> <span style="font-size: 1.1em; line-height: 1;">🚪</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 1.1 BARRA AUXILIAR DE OPERACIONES (ACCIONES GENERALES DE CONTROL CON FILTRO SAAS) -->
+        <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4">
+            <div>
+                <h5 class="text-secondary fw-bold mb-0">🔧 Herramientas de Mantenimiento</h5>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                
+                <!-- CONTROLES PARA USUARIOS PRO O ADMINISTRADORES -->
+                {% if user.is_staff or user.profile.is_pro %}
+                    
+                    <!-- BOTÓN DE PDF PRO (ACTIVO) -->
+                    <a href="{% url 'exportar_pdf' %}" class="btn btn-danger btn-custom-action shadow-sm">
+                        📄 Exportar Reporte PDF
+                    </a>
+
+                    <!-- BOTÓN A LISTA DE PRECIOS WEB (ACTIVO) -->
+                    <a href="{% url 'precios' %}" class="btn btn-primary btn-custom-action shadow-sm">
+                        🏷️ Monitor de Lista Web
+                    </a>
+
+                    <!-- BOTÓN CARGAR CSV (ACTIVO) -->
+                    <a href="{% url 'cargar_csv' %}" class="btn btn-outline-primary btn-custom-action shadow-sm bg-white">
+                        📤 Subir Inventario CSV
+                    </a>
+
+                <!-- CONTROLES CAPADOS PARA USUARIOS FREE (PAYWALL VISUAL) -->
+                {% else %}
+                    
+                    <!-- BOTÓN DE PDF PRO (BLOQUEADO Y PURIFICADO) -->
+                    <button type="button" class="btn btn-secondary btn-custom-action shadow-sm" style="opacity: 0.7; cursor: pointer;" onclick="abrirPaywall()">
+                        🔒 Exportar Reporte PDF
+                    </button> <!-- <--- CORREGIDO AQUÍ: Cierra con </button> -->
+
+                    <!-- BOTÓN A LISTA DE PRECIOS WEB (BLOQUEADO Y PURIFICADO) -->
+                    <button type="button" class="btn btn-secondary btn-custom-action shadow-sm" style="opacity: 0.7; cursor: pointer;" onclick="abrirPaywall()">
+                        🔒 Monitor de Lista Web
+                    </button> <!-- <--- CORREGIDO AQUÍ: Cierra con </button> y limpiado el data-bs -->
+
+                    <!-- BOTÓN CARGAR CSV (BLOQUEADO Y PURIFICADO) -->
+                    <button type="button" class="btn btn-secondary btn-custom-action shadow-sm" style="opacity: 0.7; cursor: pointer;" onclick="abrirPaywall()">
+                        🔒 Subir Inventario CSV
+                    </button> <!-- <--- CORREGIDO AQUÍ: Cierra con </button> y limpiado el data-bs -->
+
+                {% endif %}
+
+                <!-- CONTROL EXCLUSIVO DEL ADMINISTRADOR (Sigue igual) -->
+                {% if user.is_staff %}
+                <a href="{% url 'actualizar_tasas' %}" class="btn btn-dark btn-custom-action shadow-sm">
+                    💰 Sincronizar Tasas Diario
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    <!--=============== Data del Mercado - TASA BCV - Binance - GAP =======================-->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3 text-center border-start border-primary border-5">
+                    <small class="text-muted fw-bold text-uppercase">BCV Oficial</small>
+                    <h3 class="mb-0">Bs. {{ tasa_actual.bcv_rate }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3 text-center border-start border-success border-5">
+                    <small class="text-muted fw-bold text-uppercase">Binance P2P</small>
+                    <h3 class="mb-0">Bs. {{ tasa_actual.binance_rate }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3 text-center border-start border-warning border-5">
+                    <small class="text-muted fw-bold text-uppercase">Brecha Real</small>
+                    <h3 class="mb-0 text-warning">{{ tasa_actual.gap_percentage|floatformat:2 }}%</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3 text-center border-start border-info border-5">
+                    <small class="text-muted fw-bold text-uppercase">Items Cargados</small>
+                    <h3 class="mb-0">20</h3>
+                </div>
+            </div>
+        </div>
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+     <!-- 2. CALCULADORA DINÁMICA PREMIUM -->
+        <div class="card shadow-lg section-spacer border-0" style="overflow: hidden; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;">
+            <!-- Encabezado con degradado idéntico al Header de Marca -->
+            <div class="card-header header-custom" style="background: linear-gradient(135deg, #1a237e, #0d47a1); border: none; padding: 25px 40px;">
+                <h4 class="mb-0 text-center text-uppercase fw-bold text-white" style="letter-spacing: 2px; font-size: 1.25em;">🎯 Simulador Avanzado de Cobertura Causal</h4>     
+            </div>
+
+            
+           <div class="card-body calculator-body bg-white" style="padding: 45px 40px !important;">
+                <!-- Inputs Superiores Ensanchados -->
+                <div class="row g-4 align-items-center mb-5">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2" style="font-size: 0.85em; letter-spacing: 0.5px;">MONTO BASE A PROTEGER ($)</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-light text-secondary fw-bold" style="border-radius: 12px 0 0 12px; padding: 0 20px;">$</span>
+                            <input type="number" id="monto_usd" class="form-control border-start-0 bg-light fw-bold text-dark" value="104.65" oninput="simular()" style="font-size: 1.4rem; border-radius: 0 12px 12px 0; height: 60px; padding-left: 5px;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2" style="font-size: 0.85em; letter-spacing: 0.5px;">HORIZONTE DE COBRO (DÍAS)</label>
+                        <select id="dias_f" class="form-select form-select-lg bg-light fw-bold text-dark border-0" onchange="simular()" style="height: 60px; border-radius: 12px; font-size: 1rem; padding-left: 20px; cursor: pointer;">
+                            <option value="0">0 días (Hoy / Tiempo Real)</option>
+                            <option value="14">14 días (Primera Cuota)</option>
+                            <option value="28">28 días (Segunda Cuota)</option>
+                            <option value="42" selected>42 días (Ciclo Cashea Completo)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- MATRIZ DE 4 PRECIOS HORIZONTALES (FUERZA BRUTA CSS) -->
+                <div style="display: flex; gap: 15px; width: 100%; justify-content: space-between; align-items: stretch; margin-bottom: 40px; flex-wrap: nowrap;">
+                    
+                    <!-- 1. PRECIO CONTADO CASH (Gris Elegante Neutral) -->
+                    <div style="flex: 1; background-color: #f8f9fa; border: 1px solid #6c757d; border-radius: 16px; min-height: 140px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <span style="color: #6c757d; font-size: 0.75em; letter-spacing: 0.5px; font-weight: bold; text-uppercase; display: block; margin-bottom: 8px;">1. Contado (Cash $)</span>
+                        <h2 style="font-weight: bold; margin-bottom: 4px; color: #212529; font-size: 1.75rem;" id="calc_cash">$ 0.00</h2>
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #6c757d;">No Convertible a Bs. / Precio a Proteger en el horizonte de tiempo</span>
+                    </div>
+
+                    <!-- 2. PRECIO CONTADO BCV (Amarillo Advertencia Suave) -->
+                    <div style="flex: 1; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 16px; min-height: 140px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <span style="color: #664d03; font-size: 0.75em; letter-spacing: 0.5px; font-weight: bold; text-uppercase; display: block; margin-bottom: 8px;">2. Contado (BCV $)</span>
+                        <h2 style="font-weight: bold; margin-bottom: 4px; color: #664d03; font-size: 1.75rem;" id="calc_bcv_usd">$ 0.00</h2>
+                        <span style="font-size: 0.8rem; font-weight: bold; color: #856404;" id="calc_bcv_bs">Bs. 0.00</span>
+                    </div>
+
+                    <!-- 3. PRECIO CASHEA FULL (Rojo/Rosa Alerta Financiera) -->
+                    <div style="flex: 1; background-color: #f8d7da; border: 1px solid #dc3545; border-radius: 16px; min-height: 140px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <span style="color: #842029; font-size: 0.75em; letter-spacing: 0.5px; font-weight: bold; text-uppercase; display: block; margin-bottom: 8px;">3. Cashea FULL ($)</span>
+                        <h2 style="font-weight: bold; margin-bottom: 4px; color: #842029; font-size: 1.75rem;" id="calc_full_usd">$ 0.00</h2>
+                        <span style="font-size: 0.8rem; color: #a61c2c; display: block; margin-bottom: 6px;" id="calc_full_bs">Bs. 0.00</span>
+                        <span style="background-color: #dc3545; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.65em; font-weight: 700; display: inline-block;" id="calc_full_cuotas">Inicial: $0.00 + 3Q</span>
+                    </div>
+
+                    <!-- 4. PRECIO CASHEA DCTO (Verde Éxito/Oportunidad) -->
+                    <div style="flex: 1; background-color: #d1e7dd; border: 1px solid #198754; border-radius: 16px; min-height: 140px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <span style="color: #0f5132; font-size: 0.75em; letter-spacing: 0.5px; font-weight: bold; text-uppercase; display: block; margin-bottom: 8px;">4. Cashea DCTO ($)</span>
+                        <h2 style="font-weight: bold; margin-bottom: 4px; color: #0f5132; font-size: 1.75rem;" id="calc_dcto_usd">$ 0.00</h2>
+                        <span style="font-size: 0.8rem; color: #146c43; display: block; margin-bottom: 6px;" id="calc_dcto_bs">Bs. 0.00</span>
+                        <span style="background-color: #198754; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.65em; font-weight: 700; display: inline-block;" id="calc_dcto_cuotas">Inicial: $0.00 + 3Q</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Datos Proyectados Inferiores con Diseño Limpio -->
+                <div class="row g-0 text-center border-top pt-2">
+                    <div class="col-6 col-md-3 stat-box">
+                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">BCV Proyectado</div>
+                        <div class="h4 mb-0 fw-bold text-dark" id="res_bcv" style="font-size: 1.25rem;">---</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-box">
+                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Binance Proyectado</div>
+                        <div class="h4 mb-0 fw-bold text-dark" id="res_bin" style="font-size: 1.25rem;">---</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-box">
+                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Factor G15 (Gap)</div>
+                        <div class="h4 mb-0 text-primary fw-bold" id="res_g15" style="font-size: 1.25rem;">---</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-box">
+                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Brecha de Riesgo</div>
+                        <div class="h4 mb-0 text-danger fw-bold" id="res_brecha" style="font-size: 1.25rem;">---</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TABLA DE ANÁLISIS HISTÓRICO -->
+        <div class="table-container section-spacer mb-5">
+            <div class="table-container section-spacer">
+                <div class="p-4 bg-white border-bottom">
+                    <h4 class="mb-0 fw-bold">📉 Análisis de Estabilidad y Brecha (Últimos 15 días)</h4>
+                </div>
+                <table class="table table-hover mb-0 text-center align-middle" style="font-size: 1.1rem;">
+                    <thead class="table-light">
+                        <tr style="height: 70px;">
+                            <th>FECHA</th>
+                            <th>TASA BCV</th>
+                            <th>TASA BINANCE</th>
+                            <th>GAP (%)</th>
+                            <th>ESTADO RIESGO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in analisis %}
+                        <tr style="height: 60px;">
+                            <td>{{ item.fecha|date:"d/m/Y" }}</td>
+                            <td>Bs. {{ item.bcv }}</td>
+                            <td>Bs. {{ item.binance }}</td>
+                            <td class="fw-bold">{{ item.gap }}%</td>
+                            <td>
+                                {% if item.gap > 20 %}
+                                <span class="badge rounded-pill p-2 px-4" style="background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a;">RIESGO ALTO</span>
+                                {% else %}
+                                <span class="badge rounded-pill p-2 px-4" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;">ESTABLE</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Grafica de Tasas ----------------------------------------->
+
+        <div class="col-md-8"> 
+            <div class="card shadow"> 
+                <div class="card-body text-center" style="min-height: 400px; padding: 10px;">
+                    {% if grafico_offline %}
+                        <!-- Render directo del texto Base64 como imagen pura -->
+                        <img src="data:image/png;base64,{{ grafico_offline }}" alt="Tendencia de Brecha Cambiaria" class="img-fluid" style="width: 100%; height: auto; border-radius: 4px;">
+                    {% else %}
+                        <p class="text-muted mt-5">Cargando curvas de tendencia...</p>
+                    {% endif %}
+                </div> 
+            </div> 
+        </div> 
+
+    </div>
+
+    <!-- 4. FOOTER TÉCNICO -->
+    <footer class="pb-5 text-center text-muted small">
+        <hr>
+        <p class="mb-1">🛡️ <strong>Algoritmo Predictivo HierroEnLinea</strong> | Basado en Mínimos Cuadrados (NumPy)</p>
+        <p>Valores generados para apoyo en la toma de decisiones comerciales.</p>
+    </footer>
+
+    <!-- POPUP DE CONVERSIÓN MONETARIA (PAYWALL MODAL) -->
+    <div class="modal fade" id="paywallModal" tabindex="-1" aria-hidden="true" style="position: fixed; top: 0; left: 0; z-index: 1055; width: 100%; height: 100%; overflow-x: hidden; overflow-y: auto; outline: 0; background: rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-dialog-centered" style="margin: 1.75rem auto; max-width: 500px; display: flex; align-items: center; min-height: calc(100% - 3.5rem);">
+            <div class="modal-content" style="position: relative; display: flex; flex-direction: column; width: 100%; pointer-events: auto; background-color: #fff; background-clip: padding-box; border: none; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); overflow: hidden;">
+                
+                <!-- Encabezado del Popup -->
+                <div class="modal-header text-white" style="background: linear-gradient(135deg, #1a237e, #0d47a1); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;">
+                    <h5 class="modal-title fw-bold" style="margin: 0; font-size: 1.15rem;">🚀 Desbloquea HierroEnLinea PRO</h5>
+                    <!-- Botón Cerrar Manual -->
+                    <button type="button" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 0;" onclick="cerrarPaywall()">×</button>
+                </div>
+                
+                <!-- Cuerpo del Popup -->
+                <div class="modal-body p-4 text-center">
+                    <p class="text-muted small mb-4">Activa la Carga Masiva de Inventario (CSV), descarga de Reportes PDF y el acceso al Monitor de Lista Web con blindaje predictivo.</p>
+                    
+                    <div class="p-3 mb-4 text-start shadow-sm" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px dashed #1565c0; border-radius: 16px;">
+                        <h6 class="fw-bold text-primary mb-2" style="font-size: 0.85em; letter-spacing: 0.5px;">📲 DATOS DE PAGO MÓVIL (PLAN MENSUAL):</h6>
+                        <small class="d-block text-dark mb-1"><b>Banco:</b> Bancaribe (0114)</small>
+                        <small class="d-block text-dark mb-1"><b>Teléfono:</b> 0412-XXXXXXX</small>
+                        <small class="d-block text-dark mb-1"><b>Cédula:</b> V-XX.XXX.XXX</small>
+                        <small class="d-block text-primary fw-bold"><b>Inversión:</b> Bs. Equivalente a $10.00 / mes</small>
+                    </div>
+                    
+                    <form action="{% url 'solicitar_pro' %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <div class="mb-3 text-start">
+                            <label class="form-label small fw-bold text-secondary mb-2">Número de Referencia (Conciliación Bancaria):</label>
+                            <input type="text" name="referencia" class="form-control" placeholder="Ej: 458922" required style="height: 48px; border-radius: 12px; padding-left: 15px; border: 1px solid #ced4da; width: 100%; box-sizing: border-box;">
+                        </div>
+                        <button type="submit" class="btn btn-success fw-bold w-100 rounded-pill shadow-sm" style="height: 48px; background-color: #198754; border: none; font-size: 0.95rem; color: white; cursor: pointer; transition: 0.2s;">
+                            💸 Reportar Pago Móvil e Activar PRO
+                        </button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inyectamos las constantes de regresión lineal desde Django
+        const m_bcv = {{ proy.m_bcv|stringformat:"f" }}; 
+        const b_bcv = {{ proy.b_bcv|stringformat:"f" }};
+        const m_bin = {{ proy.m_bin|stringformat:"f" }};
+        const b_bin = {{ proy.b_bin|stringformat:"f" }};
+        
+        // Tasas reales de hoy para el Contado
+        const tasa_bcv_h = {{ tasa_actual.bcv_rate|stringformat:"f" }};
+        const tasa_bin_h = {{ tasa_actual.binance_rate|stringformat:"f" }};
+        
+        // TRAPAMOS EL FACTOR ADIMENSIONAL REAL DESDE PYTHON (Tu valor_medio)
+        const g15 = {{ g15_real|stringformat:"f" }}; 
+
+     function simular() {
+            const repo_usd = parseFloat(document.getElementById('monto_usd').value) || 0;
+            const dias = parseInt(document.getElementById('dias_f').value);
+            
+            if (repo_usd <= 0) {
+                limpiarUI();
+                return;
+            }
+
+            // =====================================================================
+            // 1. DINÁMICA DEL HORIZONTE SELECCIONADO (Para las métricas inferiores)
+            // =====================================================================
+            let bcv_f, bin_f;
+            if (dias === 0) {
+                bcv_f = tasa_bcv_h;
+                bin_f = tasa_bin_h;
+            } else {
+                const x_futuro = 91 + dias;
+                bcv_f = (m_bcv * x_futuro) + b_bcv;
+                bin_f = (m_bin * x_futuro) + b_bin;
+            }
+
+            // =====================================================================
+            // 2. ENTORNO FIJO A 42 DÍAS (Para el Blindaje de Precios Cashea)
+            // Fijamos x_cashea a 133 (91 históricos + 42 futuros) para evitar distorsiones
+            // =====================================================================
+            const x_cashea = 91 + 42;
+            const bcv_cashea = (m_bcv * x_cashea) + b_bcv;
+            const bin_cashea = (m_bin * x_cashea) + b_bin;
+
+            // Escalamos la base de Cashea automáticamente (Paridad real de tu CSV)
+            const base_cashea_f = repo_usd * 1.26068965;
+            const base_cashea_o = base_cashea_f; 
+
+            // =====================================================================
+            // MATEMÁTICA ANCLA: EJECUCIÓN ESCRITA AL HORIZONTE DE PROTECCIÓN
+            // =====================================================================
+            
+            // Tarjeta 1 y 2: Contado Cash y BCV (Se calculan con la tasa SPOT fija de HOY)
+            const p_contado_bcv = (repo_usd * tasa_bin_h) / tasa_bcv_h;
+            const p_contado_bcv_bs = p_contado_bcv * tasa_bcv_h;
+
+            // Tarjeta 3: Cashea FULL (Forzado a tasas de 42 días)
+            const p_prot_full = (base_cashea_f * bin_cashea / bcv_cashea) * g15;
+            const pvp_full = p_prot_full;
+            const inicial_full = pvp_full / 2;
+            const cuota_full = (pvp_full / 2) / 3;
+
+            // Tarjeta 4: Cashea DCTO (Forzado a tasas de 42 días)
+            const p_prot_offer = (base_cashea_o * bin_cashea / bcv_cashea) * g15;
+            const desc_val = (p_prot_offer - base_cashea_o) / p_prot_offer;
+            
+            const pvp_dcto = (p_prot_offer / 2) + ((p_prot_offer / 2) * 1.018 * (1 - desc_val));
+            const inicial_dcto = (p_prot_offer / 2) * 1.018 * (1 - desc_val);
+            const cuota_dcto = (p_prot_offer / 2) / 3;
+
+            // =====================================================================
+            // INYECCIÓN VISUAL RECALIBRADA EN LA MATRIZ
+            // =====================================================================
+            
+            // Tarjeta 1: Contado Cash
+            document.getElementById('calc_cash').innerText = '$ ' + repo_usd.toFixed(2);
+
+            // Tarjeta 2: Contado BCV
+            document.getElementById('calc_bcv_usd').innerText = '$ ' + p_contado_bcv.toFixed(2);
+            document.getElementById('calc_bcv_bs').innerText = 'Bs. ' + p_contado_bcv_bs.toLocaleString('es-VE', {minimumFractionDigits: 2});
+
+            // Tarjeta 3: Cashea FULL (Muestra los bolívares calculados a la tasa proyectada del horizonte Cashea)
+            document.getElementById('calc_full_usd').innerText = '$ ' + pvp_full.toFixed(2);
+            document.getElementById('calc_full_bs').innerText = 'Bs. ' + (pvp_full * bcv_cashea).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('calc_full_cuotas').innerText = 'Inicial: $' + inicial_full.toFixed(2) + ' + 3Q de $' + cuota_full.toFixed(2);
+
+            // Tarjeta 4: Cashea DCTO (Muestra los bolívares calculados a la tasa proyectada del horizonte Cashea)
+            document.getElementById('calc_dcto_usd').innerText = '$ ' + pvp_dcto.toFixed(2);
+            document.getElementById('calc_dcto_bs').innerText = 'Bs. ' + (pvp_dcto * bcv_cashea).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('calc_dcto_cuotas').innerText = 'Inicial: $' + inicial_dcto.toFixed(2) + ' + 3Q de $' + cuota_dcto.toFixed(2);
+
+            // Actualizamos Métricas Inferiores de Soporte DINÁMICAS (Según el selector)
+            const g15_f = bin_f / bcv_f;
+            document.getElementById('res_bcv').innerText = 'Bs. ' + bcv_f.toFixed(2);
+            document.getElementById('res_bin').innerText = 'Bs. ' + bin_f.toFixed(2);
+            document.getElementById('res_g15').innerText = g15_f.toFixed(4);
+            document.getElementById('res_brecha').innerText = ((g15_f - 1) * 100).toFixed(2) + '%';
+        }
+
+        function limpiarUI() {
+            document.getElementById('calc_cash').innerText = '$ 0.00';
+            document.getElementById('calc_bcv_usd').innerText = '$ 0.00';
+            document.getElementById('calc_full_usd').innerText = '$ 0.00';
+            document.getElementById('calc_dcto_usd').innerText = '$ 0.00';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            simular();
+
+        function abrirPaywall() {
+            const modal = document.getElementById('paywallModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+            }
+        }
+
+        function cerrarPaywall() {
+            const modal = document.getElementById('paywallModal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+            }
+        }
+
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Precios - Cashea 42d</title>
+    <style>
+
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 30px; background: #eceff1; color: #37474f; }
+
+        /* 1. Un contenedor para que todo tenga el mismo ancho */
+        .container-app {
+            max-width: 1300px; /* O el ancho que prefieras */
+            margin: 0 auto;    /* Centra todo el bloque en la pantalla */
+        }        
+        
+        /* El Buscador Moderno *//* 3. Aseguramos que el buscador esté dentro del contenedor */        
+        .search-container { 
+            width: 100%;
+            margin-bottom: 25px; 
+        }
+
+        /* 2. Ajuste al buscador para que no se pase del margen */
+        #buscador { 
+            width: 100%; 
+            box-sizing: border-box; /* VITAL: obliga al buscador a incluir el padding dentro del 100% */
+            padding: 15px 25px; 
+            border-radius: 50px; 
+            border: 2px solid #0d6efd;
+            font-size: 1.2em;
+            outline: none;
+            transition: 0.3s;
+        }
+        #buscador:focus { box-shadow: 0 0 15px rgba(13, 110, 253, 0.3); border-color: #0a58ca; }
+
+        /* El Header con la Tasa Viva */
+        .header { 
+            background: linear-gradient(135deg, #212529 0%, #343a40 100%); 
+            color: white; padding: 20px 30px; border-radius: 15px; margin-bottom: 30px; 
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .tasa-badge { background: #198754; padding: 8px 15px; border-radius: 8px; font-weight: bold; border: 1px solid #28a745; }
+
+        /* La Tabla Centrada */
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        th { padding: 18px; text-align: center; font-size: 0.95em; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 15px; border-bottom: 1px solid #f1f1f1; text-align: center; vertical-align: middle; }
+        
+        .sku-text { color: #90a4ae; font-size: 0.75em; display: block; margin-bottom: 4px; }
+        .product-name { font-weight: 600; color: #263238; font-size: 1em; }
+        .precio-destacado { font-size: 1.1em; font-weight: bold; }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container-app"> <!-- Contenedor maestro de alineación calibrada -->
+
+        <!-- 1. ENCABEZADO INTEGRADO DE ALTA PARIDAD FINTECH -->
+        <div class="header" style="background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 25px 35px; border-radius: 15px; margin-top: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(26, 35, 126, 0.15); border: none;">
+            
+            <!-- Lado Izquierdo: Branding Corporativo Homólogo -->
+            <div style="text-align: left;">
+                <div style="font-size: 1.6em; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; margin-bottom: 2px;">
+                    🚀 BRECHA CERO <span style="font-weight: 300; font-size: 0.65em; opacity: 0.85;">V.2.1</span>
+                </div>
+                <!-- Integración sutil del operador en el flujo del diseño -->
+                <div style="font-size: 0.8em; color: rgba(255, 255, 255, 0.6); letter-spacing: 0.5px;">
+                    Operador Activo: <strong style="color: #ffffff;">{{ user.username|upper }}</strong>
+                </div>
+            </div>
+
+            <!-- Lado Derecho: Indicadores de Mercado y Salida Forzada al Extremo -->
+            <div style="display: flex; align-items: center; gap: 20px; justify-content: flex-end;">
+                
+                <!-- El Badge de Tasas Offline adaptado con estilo premium -->
+                <div class="tasa-badge" style="background: rgba(255, 255, 255, 0.15); padding: 8px 18px; border-radius: 50px; font-weight: 600; font-size: 0.9em; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.25); display: inline-flex; align-items: center;">
+                    🏛️ BCV: Bs. {{ bcv_h|floatformat:2 }} | 📉 G15: {{ g15 }}
+                </div>
+                
+                <!-- REGRESAR AL DASHBOARD (Botón auxiliar de apoyo a la navegación) -->
+                <a href="{% url 'dashboard' %}" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                    🏠 Dashboard
+                </a>
+
+                <!-- REGRESAR AL HOME (Botón auxiliar de apoyo a la navegación) -->
+                <a href="{% url 'home' %}" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; font-size: 0.85em; padding: 0 16px; border-radius: 50px; text-decoration: none; height: 38px; display: inline-flex; align-items: center; transition: 0.2s;">
+                    🏠 Inicio
+                </a>                
+
+                <!-- CERRAR SESIÓN (Formulario con el look exacto del Dashboard) -->
+                <form action="{% url 'logout' %}" method="post" style="margin: 0; display: inline-block;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: #ffffff; padding: 0 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; cursor: pointer; height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;">
+                        <span>Cerrar Sesión</span> <span style="font-size: 1.1em; line-height: 1;">🚪</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="buscador" placeholder="🔍 Escribe para filtrar (sku, lámina, tubo...)" onkeyup="filtrarTabla()">
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success shadow-sm rounded-pill text-center fw-bold">
+                    ✅ {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}        
+
+        <script>
+        function filtrarTabla() {
+            const input = document.getElementById("buscador").value.toUpperCase();
+            const rows = document.querySelectorAll("table tbody tr");
+            
+            rows.forEach(row => {
+                const text = row.innerText.toUpperCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+        </script>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th style="background:#1b5e20">Contado (Cash)</th>
+                    <th style="background:#2e7d32">Contado (Bs BCV)</th>
+                    <th style="background:#4527a0">Cashea FULL</th>
+                    <th style="background:#512da8">Inicial / Cuotas</th>
+                    <th style="background:#e65100">Cashea DCTO (Divisa)</th>
+                    <th style="background:#f57c00">Inicial / Cuotas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in items %}
+                <tr>
+                    <td style="text-align: left;">
+                        <span class="sku-text">{{ p.sku }}</span>
+                        <span class="product-name">{{ p.nombre }}</span>
+                    </td>
+                    <td class="precio-destacado">${{ p.contado_usd_efectivo }}</td>
+                    <td>
+                        <div class="precio-destacado" style="color:#1b5e20;">${{ p.contado_usd_bcv_hoy }}</div>
+                        <div style="font-size: 0.8em; color: #666;">Bs. {{ p.contado_bs_bcv }}</div>
+                    </td>
+                    <td class="precio-destacado" style="color:#4527a0;">${{ p.full_cashea }}</td>
+                    <td>
+                        <div style="font-size: 0.9em;"><strong>Inic: ${{ p.inicial_full }}</strong></div>
+                        <div style="font-size: 0.8em; color:#512da8;">3x ${{ p.cuota_full }}</div>
+                    </td>
+                    <td class="precio-destacado" style="color:#e65100;">${{ p.pvp_cashea_dcto }}</td>
+                    <td>
+                        <div style="font-size: 0.9em;"><strong>Inic: ${{ p.inicial_dcto }}</strong></div>
+                        <div style="font-size: 0.8em; color:#f57c00;">3x ${{ p.cuota_dcto }}</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div> <!-- Cierre del contenedor -->
+
+</body>
+
+<div style="background: #ff0000; padding: 20px; text-align: center; margin-bottom: 20px;">
+    <a href="/exportar-pdf/" style="color: white; font-weight: bold; font-size: 20px; text-decoration: none; border: 2px solid white; padding: 10px 20px;">
+        📥 DESCARGAR PDF AQUÍ (CLICK YA)
+    </a>
+</div>
+
+<footer class="mt-5 text-center text-muted small">
+    <hr>
+    <p>🛡️ <strong>Sistema de Protección Cambiaria HierroEnLinea</strong></p>
+    <p>Cálculos basados en Regresión Lineal de 91 días | Proyección de Riesgo a 42 días (Modelo Cashea v2.1)</p>
+    <p>Generado el: {% now "d/m/Y H:i" %}</p>
+</footer>
+</html>
