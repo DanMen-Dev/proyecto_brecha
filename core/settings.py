@@ -136,3 +136,7 @@ STATICFILES_DIRS = [
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
+
+STATIC_URL = '/static/'
+# Esta línea le dice a Django dónde centralizar los CSS del Admin en producción
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
