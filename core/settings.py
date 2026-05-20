@@ -124,19 +124,19 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-# STATIC_URL = 'static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
-
 # Redirecciones de seguridad
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
+
 STATIC_URL = '/static/'
-# Esta línea le dice a Django dónde centralizar los CSS del Admin en producción
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# 1. El STATIC_ROOT es exclusivo para que collectstatic meta la basura en producción 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # <--- CAMBIAMOS 'static' por 'staticfiles'
+
+# 2. El STATICFILES_DIRS es donde Django busca CSS locales durante el desarrollo (Si esta definido)
+# Asegúrar de que NO apunte a la misma carpeta de arriba
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
