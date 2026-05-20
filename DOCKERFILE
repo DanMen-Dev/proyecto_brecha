@@ -1,0 +1,28 @@
+# 1. Usamos una imagen oficial de Python ligera
+FROM python:3.13-slim
+
+# 2. Evitamos que Python escriba archivos .pyc y forzamos logs en tiempo real
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# 3. Instalamos dependencias del sistema necesarias para compilar NumPy y Pandas
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. Establecemos la carpeta de trabajo dentro del contenedor
+WORKDIR /app
+
+# 5. Copiamos e instalamos el manifiesto de librerías
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 6. Copiamos todo el código de la App a la caja
+COPY . /app/
+
+# 7. Exponemos el puerto estándar de ejecución
+EXPOSE 8000
+
+# 8. Comando por defecto para encender el servidor de producción (Gunicorn)
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
