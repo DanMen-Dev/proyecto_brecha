@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-roq+!t37^cr5n084u&%u#3b_h9z0_u7ytl96t1wpuj(=$9$mkp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+
+# core/settings.py
+# Añadimos la IP de Oregón para que Django acepte las conexiones directas
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '5.78.179.129', 'hierroenlinea.com']
+
+DEBUG = False
 
 
 # Application definition
