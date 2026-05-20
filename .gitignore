@@ -1,3 +1,5 @@
 venv/ 
 *.sqlite3 
 .DS_Store 
+__pycache__/ 
+"Credenciales Superusuario.txt" 

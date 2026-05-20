@@ -114,7 +114,55 @@
 
         .modal { display: none; }
 
-        .modal.show { display: block; }       
+        .modal.show { display: block; }  
+        /* ================================================================= */
+        /* CONFIGURACIÓN RESPONSIVA PARA PANTALLAS MÓVILES (MENORES A 768px)  */
+        /* ================================================================= */
+        @media (max-width: 768px) {
+            /* 1. Ajustamos los contenedores y pasamos de 40px a 15px de aire para el teléfono */
+            .container-app { 
+                padding: 0 15px !important; 
+            }
+            
+            .calculator-body { 
+                padding: 20px !important; 
+            }
+
+            /* 2. Forzamos a la Matriz de 4 Precios a volverse vertical en teléfonos */
+            .brand-header,
+            div[style*="display: flex; gap: 15px; width: 100%;"] {
+                flex-direction: column !important;
+                flex-wrap: wrap !important;
+                gap: 15px !important;
+            }
+
+            /* Cada tarjeta ahora tomará el 100% del ancho del teléfono en vez del 25% */
+            div[style*="flex: 1;"] {
+                flex: none !important;
+                width: 100% !important;
+                min-height: 110px !important;
+            }
+
+            /* 3. Ajuste estricto de la Tabla para que no se desborde */
+            table {
+                table-layout: auto !important; /* Desactivamos el ancho fijo en móvil */
+            }
+            
+            /* Escondemos columnas secundarias en teléfono para dejar solo lo crítico */
+            colgroup {
+                display: none !important;
+            }
+            
+            th:nth-child(2), td:nth-child(2), /* Oculta Tasa BCV */
+            th:nth-child(3), td:nth-child(3)  /* Oculta Tasa Binance */ {
+                display: none !important;
+            }
+            
+            /* Le damos el 100% del espacio restante al estado de riesgo */
+            th:last-child, td:last-child {
+                font-size: 0.75rem !important;
+            }
+        }             
     </style>
 
 </head>
@@ -336,39 +384,74 @@
         </div>
 
         <!-- 3. TABLA DE ANÁLISIS HISTÓRICO -->
-        <div class="table-container section-spacer mb-5">
-            <div class="table-container section-spacer">
-                <div class="p-4 bg-white border-bottom">
-                    <h4 class="mb-0 fw-bold">📉 Análisis de Estabilidad y Brecha (Últimos 15 días)</h4>
+        <div class="card shadow-lg section-spacer border-0 mb-5" style="border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.05) !important; width: 100%; clear: both;">
+            
+            <!-- Encabezado de la Tabla -->
+            <div class="card-header header-custom" style="background: linear-gradient(135deg, #212529 0%, #343a40 100%); border: none; padding: 20px 40px; border-radius: 24px 24px 0 0;">
+                <h4 class="mb-0 text-white fw-bold style-font" style="letter-spacing: 1px; font-size: 1.15em;">📉 Monitor de Cobertura Causal & Histórico de Estabilidad (Últimos 15 Días)</h4>
+            </div>
+            
+            <!-- Cuerpo Expandido a lo Ancho -->
+            <div class="card-body p-0" style="background-color: #ffffff; border-radius: 0 0 24px 24px; overflow: hidden;">
+                <div class="table-responsive" style="width: 100%;">
+                    <table class="table table-hover mb-0 text-center align-middle" style="font-size: 1.05rem; width: 100%; border-collapse: collapse; table-layout: fixed;">
+                        
+                        <!-- Configuración estricta de ancho de columnas para hoja o monitor extendido (Total 100%) -->
+                        <colgroup>
+                            <col style="width: 15%;"> <!-- Fecha -->
+                            <col style="width: 18%;"> <!-- Tasa BCV -->
+                            <col style="width: 18%;"> <!-- Tasa Binance -->
+                            <col style="width: 15%;"> <!-- GAP % -->
+                            <col style="width: 34%;"> <!-- Estado de Riesgo -->
+                        </colgroup>
+
+                        <thead class="table-light" style="background-color: #f8f9fa;">
+                            <tr style="height: 65px; border-bottom: 2px solid #dee2e6;">
+                                <th style="font-weight: 700; color: #495057; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;">FECHA</th>
+                                <th style="font-weight: 700; color: #495057; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;">TASA BCV</th>
+                                <th style="font-weight: 700; color: #495057; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;">TASA BINANCE</th>
+                                <th style="font-weight: 700; color: #495057; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;">GAP VAR. (%)</th>
+                                <th style="font-weight: 700; color: #495057; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;">ESTADO RIESGO / TERMÓMETRO</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for item in analisis %}
+                            <tr style="height: 60px; border-bottom: 1px solid #edf2f7;">
+                                <td style="color: #6c757d; font-weight: 600;">{{ item.fecha|date:"d/m/Y" }}</td>
+                                <td style="color: #212529; font-weight: 500;">Bs. {{ item.bcv|floatformat:2 }}</td>
+                                <td style="color: #212529; font-weight: 500;">Bs. {{ item.binance|floatformat:2 }}</td>
+                                
+                                <!-- Columna del GAP con alineación e indicadores de color netos -->
+                                <td class="fw-bold" style="font-size: 1.1rem;">
+                                    {% if item.gap >= 100 %}
+                                        <span style="color: #dc3545;">+{{ item.gap|add:"-100"|floatformat:2 }}%</span>
+                                    {% else %}
+                                        <span style="color: #198754;">{{ item.gap|add:"-100"|floatformat:2 }}%</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    {% if item.gap > 100.0000 %}
+                                        <span class="badge rounded-pill p-2 px-4" style="background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; font-weight: bold; font-size: 0.8rem; display: inline-block; width: 85%;">
+                                            ⚠️ Aumento de Brecha (Tendencia a aumento de precio)
+                                        </span>
+                                    {% elif item.gap < 100.0000 %}
+                                        <span class="badge rounded-pill p-2 px-4" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; font-weight: bold; font-size: 0.8rem; display: inline-block; width: 85%;">
+                                            📉 Tendencia a cerrar Brecha (Descenso de precio)
+                                        </span>
+                                    {% else %}
+                                        <span class="badge rounded-pill p-2 px-4 text-secondary bg-light border font-weight-bold" style="font-size: 0.8rem; display: inline-block; width: 85%;">
+                                            ⚖️ Paridad Estable (Sin variación de ciclo)
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
                 </div>
-                <table class="table table-hover mb-0 text-center align-middle" style="font-size: 1.1rem;">
-                    <thead class="table-light">
-                        <tr style="height: 70px;">
-                            <th>FECHA</th>
-                            <th>TASA BCV</th>
-                            <th>TASA BINANCE</th>
-                            <th>GAP (%)</th>
-                            <th>ESTADO RIESGO</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in analisis %}
-                        <tr style="height: 60px;">
-                            <td>{{ item.fecha|date:"d/m/Y" }}</td>
-                            <td>Bs. {{ item.bcv }}</td>
-                            <td>Bs. {{ item.binance }}</td>
-                            <td class="fw-bold">{{ item.gap }}%</td>
-                            <td>
-                                {% if item.gap > 20 %}
-                                <span class="badge rounded-pill p-2 px-4" style="background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a;">RIESGO ALTO</span>
-                                {% else %}
-                                <span class="badge rounded-pill p-2 px-4" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;">ESTABLE</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
             </div>
         </div>
 

@@ -1,0 +1,17 @@
+Datos de SuperUsuario de Proyecto_Brecha Cambiaria
+
+usuario: administrador_brecha
+clave: Admin010203
+
+
+fecha creacion 11 de mayo 2026
+
+=================================
+
+Usuario Pro
+
+usuario: usuario
+clave: ClaveGeneral01
+
+
+fecha creacion 17 de mayo 2026

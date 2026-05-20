@@ -90,38 +90,89 @@ def proyectar_escenario_personalizado(tasas_queryset, dias_a_futuro):
         'valor_medio_g15': (b_gap + ((m_gap * dia_objetivo) + b_gap)) / 2
     }
 
-    #==========================================================================
+    #===================== Grafica de ejes Simples ======================================
+
+# def generar_grafico_base64(tasas_queryset):  
+#     # 1. Extraemos los datos en orden cronológico
+#     fechas = [t.date.strftime('%d/%m') for t in tasas_queryset]
+#     bcv = [float(t.bcv_rate) for t in tasas_queryset]
+#     binance = [float(t.binance_rate) for t in tasas_queryset]
+
+#     # 2. Creamos la figura
+#     plt.figure(figsize=(8, 4))
+#     plt.plot(fechas, bcv, label='Tasa BCV', color='#0d6efd', linewidth=2)
+#     plt.plot(fechas, binance, label='Tasa Binance', color='#dc3545', linewidth=2)
+    
+#     # Ajustes estéticos limpios
+#     plt.title('Evolución de Tasas (Últimos 90 días)', fontsize=12, fontweight='bold')
+#     plt.xlabel('Fecha')
+#     plt.ylabel('Bs. por USD')
+#     plt.legend()
+#     plt.grid(True, linestyle='--', alpha=0.5)
+    
+#     # Reducimos la cantidad de etiquetas en el eje X para que no se amontonen
+#     plt.xticks(fechas[::10], rotation=45) 
+#     plt.tight_layout()
+
+#     # 3. Guardamos el gráfico en memoria como si fuera un archivo
+#     buffer = io.BytesIO()
+#     plt.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     image_png = buffer.getvalue()
+#     buffer.close()
+#     plt.close()
+
+#     # 4. Lo codificamos a Base64 (Texto plano interpretable por cualquier navegador)
+#     grafico_base64 = base64.b64encode(image_png).decode('utf-8')
+#     return grafico_base64
+
+    #===================== Grafica de ejes Dobles ======================================
 
 def generar_grafico_base64(tasas_queryset):
-    # 1. Extraemos los datos en orden cronológico
+    # 1. Extraemos la data completa de la BD (Orden cronológico)
     fechas = [t.date.strftime('%d/%m') for t in tasas_queryset]
     bcv = [float(t.bcv_rate) for t in tasas_queryset]
     binance = [float(t.binance_rate) for t in tasas_queryset]
+    gaps = [float(t.gap_percentage) * 100 for t in tasas_queryset] # En porcentaje (ej: 15.4)
 
-    # 2. Creamos la figura
-    plt.figure(figsize=(8, 4))
-    plt.plot(fechas, bcv, label='Tasa BCV', color='#0d6efd', linewidth=2)
-    plt.plot(fechas, binance, label='Tasa Binance', color='#dc3545', linewidth=2)
+    # 2. Configuración de la figura principal (Eje Izquierdo - Tasas en Bs)
+    fig, ax1 = plt.subplots(figsize=(9, 4.5))
     
-    # Ajustes estéticos limpios
-    plt.title('Evolución de Tasas (Últimos 90 días)', fontsize=12, fontweight='bold')
-    plt.xlabel('Fecha')
-    plt.ylabel('Bs. por USD')
-    plt.legend()
-    plt.grid(True, linestyle='--', alpha=0.5)
+    # Dibujamos las curvas reales de las tasas
+    ax1.plot(fechas, bcv, label='Tasa BCV Real', color='#0d6efd', linewidth=2, alpha=0.8)
+    ax1.plot(fechas, binance, label='Tasa Binance Real', color='#dc3545', linewidth=2, alpha=0.8)
+    ax1.set_ylabel('Tasas de Cambio (Bs.)', fontname='Segoe UI', fontweight='bold', color='#1a237e')
+    ax1.tick_params(axis='y', labelcolor='#1a237e')
     
-    # Reducimos la cantidad de etiquetas en el eje X para que no se amontonen
-    plt.xticks(fechas[::10], rotation=45) 
+    # 3. CONSTRUCCIÓN DEL TERMÓMETRO (Eje Derecho Secundario - GAP %)
+    ax2 = ax1.twinx()
+    ax2.plot(fechas, gaps, label='Brecha / GAP (%)', color='#198754', linewidth=1.5, linestyle=':', alpha=0.9)
+    ax2.set_ylabel('Brecha Cambiaria - GAP (%)', fontname='Segoe UI', fontweight='bold', color='#198754')
+    ax2.tick_params(axis='y', labelcolor='#198754')
+
+    # Ajustes estéticos de alta costura corporativa
+    plt.title('Monitor de Cobertura Causal & Termómetro de Brecha (Trimestral)', fontsize=12, fontweight='bold', fontname='Segoe UI', pad=15)
+    ax1.set_xlabel('Línea Temporal (Días del Periodo)', fontname='Segoe UI', labelpad=10)
+    
+    # Unificamos las leyendas de ambos ejes en una sola caja
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left', frameon=True, facecolor='#ffffff', edgecolor='#dee2e6')
+    
+    ax1.grid(True, linestyle='--', alpha=0.4, color='#90a4ae')
+    
+    # Controlamos el amontonamiento del eje X (Muestra una etiqueta cada 10 días)
+    ax1.set_xticks(np.arange(0, len(fechas), 10))
+    ax1.set_xticklabels(fechas[::10], rotation=45, style='italic', fontsize=9)
+    
     plt.tight_layout()
 
-    # 3. Guardamos el gráfico en memoria como si fuera un archivo
+    # 4. Compresión binaria a texto Base64
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', dpi=110)
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
     plt.close()
 
-    # 4. Lo codificamos a Base64 (Texto plano interpretable por cualquier navegador)
-    grafico_base64 = base64.b64encode(image_png).decode('utf-8')
-    return grafico_base64
+    return base64.b64encode(image_png).decode('utf-8')
