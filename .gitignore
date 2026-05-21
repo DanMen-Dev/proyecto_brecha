@@ -1,5 +1,22 @@
+ # =====================================================================
+# CANDADOS DE PRIVACIDAD LOCAL (PROHIBIDO SUBIR A GITHUB)
+# =====================================================================
+
+# 1. Bloquear extensiones específicas (Notas, respaldos de Excel o borradores de Word)
+*.txt
+*.xlsx
+*.csv
+*.docx
+*.pdf
+
+# 2. Bloquear una carpeta completa (La mejor opción para guardar basura de desarrollo)
+# Crea una carpeta en la raíz llamada 'privado' o 'notas_internas' y guárdalo todo ahí
+privado/
+notas_internas/
+respaldos_excel/
+
 venv/ 
 *.sqlite3 
 .DS_Store 
 __pycache__/ 
-"Credenciales Superusuario.txt" 
+"Credenciales Superusuario.txt"
