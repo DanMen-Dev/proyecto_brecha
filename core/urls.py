@@ -22,6 +22,6 @@ urlpatterns = [
     path('solicitar-pro/', solicitar_pro, name='solicitar_pro'),
 
     # EL PASAPORTE DE ENTRADA INDUSTRIAL PARA LOS ESTÁTICOS CON DEBUG=FALSE:
-    re_path(r'^static/(?p<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
