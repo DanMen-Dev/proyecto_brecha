@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve # Librería nativa para servir en producción
 from django.urls import re_path
-ro
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
