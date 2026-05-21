@@ -21,7 +21,5 @@ urlpatterns = [
     path('actualizar-tasas/', actualizar_tasas_manual, name='actualizar_tasas'),
     path('solicitar-pro/', solicitar_pro, name='solicitar_pro'),
 
-    # EL PASAPORTE DE ENTRADA INDUSTRIAL PARA LOS ESTÁTICOS CON DEBUG=FALSE:
-    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
