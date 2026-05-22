@@ -36,16 +36,26 @@ def calcular_ajuste_prediccion(tasas_queryset):
     # ----------------------------------------------------
 
     # EXTIRPACIÓN DEL PROMEDIO ERRÓNEO:
-    # Evaluamos la ecuación de la recta de forma directa en el punto máximo de exposición futura (Día 131)
-    # Esto elimina el '/ 2' y devuelve el multiplicador puro de cobertura intertemporal
-    factor_proteccion_futura = (m * 131) + b
+    # Evaluamos la ecuación de la recta de forma directa en el punto máximo de exposición futura (Día 131) (Descartado)
+    # =========================================================================
+    # CALIBRACIÓN CIENTÍFICA: PUNTO MEDIO DE MADURACIÓN FUTURA (DÍA 66)
+    # En una serie de 45 días, el día 66 representa el centro exacto del ciclo 
+    # quincenal futuro (Día 45 + 21 días intermedios de la Cuota 2).
+    # =========================================================================
+
+    factor_proteccion_futura = (m * 66) + b
     
     # Candado de resguardo: Si la brecha tiende a cerrarse en el trimestre, el factor nunca será menor a 1.00
     if factor_proteccion_futura < 1.00:
         factor_proteccion_futura = 1.00
         
-    print(f"Factor G15 de Seguridad Aplicado: {factor_proteccion_futura:.4f}")
-    print("="*30 + "\n")
+    #print(f"Factor G15 de Seguridad Aplicado: {factor_proteccion_futura:.4f}")
+    #print("="*30 + "\n")
+
+    print(f"\n⚡ CALIBRACIÓN SAAS SENSIPLE 45D:")
+    print(f"Ecuación del Riesgo: y = {m:.6f}x + {b:.6f}")
+    print(f"Factor G15 Evaluado en Punto Medio (Día 66): {factor_proteccion_futura:.4f}")
+
 
     return factor_proteccion_futura
 
