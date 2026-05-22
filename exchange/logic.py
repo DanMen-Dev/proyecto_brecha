@@ -13,27 +13,41 @@ def calcular_ajuste_prediccion(tasas_queryset):
     
     for i, t in enumerate(registros):
         if t.gap_percentage and t.gap_percentage != 0:
-            y.append(float(t.gap_percentage))
+            # NORMALIZAMOS LA ESCALA: Si el dato en la BD está inflado (ej: 108.12),
+            # lo dividimos entre 100 para regresarlo a su escala adimensional real (1.0812)
+            val_gap = float(t.gap_percentage)
+            if val_gap > 10:
+                val_gap = val_gap / 100.0
+            y.append(val_gap)
             x.append(i + 1)
 
-    if not y: return 1.0294
+    if not y: 
+        return 1.0294
 
     y_np, x_np = np.array(y), np.array(x)
     m, b = np.polyfit(x_np, y_np, 1)
     
-    # --- ESTO ES LO QUE NECESITAMOS VER EN LA TERMINAL ---
+    # --- AUDITORÍA MATEMÁTICA EN TERMINAL ---
     print("\n" + "="*30)
-    print(f"DEBUG MATEMÁTICO:")
-    print(f"Pendiente (m): {m:.6f}")
-    print(f"Intersección (b): {b:.6f}")
-    print(f"Ecuación: y = {m:.6f}x + {b:.6f}")
+    print(f"DEBUG MONETIZACIÓN SAAS:")
+    print(f"Pendiente de la Brecha (m): {m:.6f}")
+    print(f"Intersección Base (b): {b:.6f}")
+    print(f"Ecuación del Riesgo: y = {m:.6f}x + {b:.6f}")
     # ----------------------------------------------------
 
-    valor_inicio = (m * 1) + b
-    valor_final = (m * 131) + b
-    valor_medio = (valor_inicio + valor_final) / 2
+    # EXTIRPACIÓN DEL PROMEDIO ERRÓNEO:
+    # Evaluamos la ecuación de la recta de forma directa en el punto máximo de exposición futura (Día 131)
+    # Esto elimina el '/ 2' y devuelve el multiplicador puro de cobertura intertemporal
+    factor_proteccion_futura = (m * 131) + b
     
-    return valor_medio
+    # Candado de resguardo: Si la brecha tiende a cerrarse en el trimestre, el factor nunca será menor a 1.00
+    if factor_proteccion_futura < 1.00:
+        factor_proteccion_futura = 1.00
+        
+    print(f"Factor G15 de Seguridad Aplicado: {factor_proteccion_futura:.4f}")
+    print("="*30 + "\n")
+
+    return factor_proteccion_futura
 
     #==================================================================================
 

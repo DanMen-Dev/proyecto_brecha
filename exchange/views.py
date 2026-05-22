@@ -50,9 +50,9 @@ def dashboard(request):
     if not tasas_qs.exists():
         return render(request, 'exchange/dashboard.html', {'error': 'Sin datos'})
 
-    tasas_cron = tasas_qs[::-1]
+    tasas_cron = tasas_qs[::-1] # Orden cronológico
     
-    # Cálculos de Regresión para el JS de la Calculadora
+    # REGRESIÓN DE 91 DÍAS ORIGINAL (Tu lógica intacta de una sola ala)
     bcv_list = [float(t.bcv_rate) for t in tasas_cron]
     binance_list = [float(t.binance_rate) for t in tasas_cron]
     x = np.arange(1, len(bcv_list) + 1)
@@ -60,35 +60,41 @@ def dashboard(request):
     m_bcv, b_bcv = np.polyfit(x, bcv_list, 1)
     m_bin, b_bin = np.polyfit(x, binance_list, 1)
 
-    # 1. LLAMAMOS A TU FUNCIÓN EXTRAÍDA PARA EXTRAER EL VALOR MEDIO EXACTO
-    g15_real_valor = calcular_ajuste_prediccion(tasas_cron)    
 
-    # NUEVA INYECCIÓN INMUNE: Generamos el gráfico usando tu tasas_cron existente
-    grafico_data = generar_grafico_base64(tasas_cron)    
+    # TRAPAMOS EL G15 REAL QUE CALCULA TU FUNCIÓN EN LOGIC.PY (VALOR MEDIO ADIMENSIONAL)
+
+    tasas_recientes_45 = tasas_cron[-45:]     
+    g15_real_valor = calcular_ajuste_prediccion(tasas_recientes_45)
+
+    #g15_real_valor = calcular_ajuste_prediccion(tasas_cron)
+    
+    # Candado estricto: Si el mercado tiende a la baja, el factor nunca será menor a 1.00
+    if g15_real_valor < 1.00:
+        g15_real_valor = 1.00
+
+    # Generamos el gráfico offline avanzado de doble eje
+    grafico_data = generar_grafico_base64(tasas_cron)
 
     # Preparar la tabla de análisis (Últimos 15 días)
     analisis_data = []
     for t in tasas_qs[:15]:
-        # Gap en porcentaje para la vista
         gap_pct = float(t.gap_percentage) * 100
         analisis_data.append({
             'fecha': t.date,
             'bcv': t.bcv_rate,
             'binance': t.binance_rate,
-            'gap': round(gap_pct, 2),
-            'riesgo': 'ALTO' if gap_pct > 15 else 'BAJO' # Umbral de riesgo
+            'gap': round(gap_pct, 4),
         })
 
-    # Retorno unificado 
     return render(request, 'exchange/dashboard.html', {
         'analisis': analisis_data,
         'proy': {
             'm_bcv': m_bcv, 'b_bcv': b_bcv,
             'm_bin': m_bin, 'b_bin': b_bin,
         },
-        'g15_real': g15_real_valor, # <--- ENVIAMOS EL VALOR MEDIO REAL (EJ: 0.9389)
+        'g15_real': g15_real_valor, # El escudo purificado
         'tasa_actual': tasas_qs.first(),
-        'grafico_offline': grafico_data, # <--- La única línea nueva del diccionario
+        'grafico_offline': grafico_data,
     })
 
     #=====================================================================================

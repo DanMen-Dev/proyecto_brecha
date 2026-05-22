@@ -32,7 +32,7 @@ DEBUG = True
 # Añadimos la IP de Oregón para que Django acepte las conexiones directas
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '5.78.179.129', 'hierroenlinea.com']
 
-DEBUG = False
+#DEBUG = False
 
 
 # Application definition

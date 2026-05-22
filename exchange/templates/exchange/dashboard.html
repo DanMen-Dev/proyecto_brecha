@@ -303,7 +303,7 @@
             </div>
 
             
-           <div class="card-body calculator-body bg-white" style="padding: 45px 40px !important;">
+            <div class="card-body calculator-body bg-white" style="padding: 45px 40px !important;">
                 <!-- Inputs Superiores Ensanchados -->
                 <div class="row g-4 align-items-center mb-5">
                     <div class="col-md-6">
@@ -362,24 +362,113 @@
 
 
                 <!-- Datos Proyectados Inferiores con Diseño Limpio -->
-                <div class="row g-0 text-center border-top pt-2">
-                    <div class="col-6 col-md-3 stat-box">
-                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">BCV Proyectado</div>
-                        <div class="h4 mb-0 fw-bold text-dark" id="res_bcv" style="font-size: 1.25rem;">---</div>
+                <!-- DETALLE DE SOPORTE METROLÓGICO & AUDITORÍA DE RETORNO -->
+                <div class="row g-0 border-top pt-3 mt-4" style="clear: both; align-items: stretch;">
+                    
+                    <!-- ALA IZQUIERDA: Métricas del Horizonte Seleccionado (Tu bloque de soporte expandido) -->
+                    <div class="col-md-5 p-3 text-center" style="border-right: 1px dashed #dee2e6;">
+                        <h6 class="fw-bold text-secondary text-uppercase mb-3" style="font-size: 0.75em; letter-spacing: 1px;">📈 Métricas del Horizonte Dinámico</h6>
+                        <div class="row g-2">
+                            <div class="col-6 p-2 bg-light rounded-3 mb-2">
+                                <div class="small text-muted" style="font-size: 0.7em;">BCV PROYECTADO</div>
+                                <div class="fw-bold text-dark" id="res_bcv" style="font-size: 1.1rem;">---</div>
+                            </div>
+                            <div class="col-6 p-2 bg-light rounded-3 mb-2">
+                                <div class="small text-muted" style="font-size: 0.7em;">BINANCE PROYECTADO</div>
+                                <div class="fw-bold text-dark" id="res_bin" style="font-size: 1.1rem;">---</div>
+                            </div>
+                            <div class="col-6 p-2 bg-light rounded-3">
+                                <div class="small text-muted" style="font-size: 0.7em;">FACTOR G15 (GAP)</div>
+                                <div class="fw-bold text-primary" id="res_g15" style="font-size: 1.1rem;">---</div>
+                            </div>
+                            <div class="col-6 p-2 bg-light rounded-3">
+                                <div class="small text-muted" style="font-size: 0.7em;">BRECHA DE RIESGO</div>
+                                <div class="fw-bold text-danger" id="res_brecha" style="font-size: 1.1rem;">---</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-3 stat-box">
-                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Binance Proyectado</div>
-                        <div class="h4 mb-0 fw-bold text-dark" id="res_bin" style="font-size: 1.25rem;">---</div>
+
+                    <!-- ALA DERECHA: AUDITORÍA DE RETORNO QUINCENAL DESGLOSADA (ANTIDOTO AL ESCEPTICISMO) -->
+                    <div class="col-md-7 p-3">
+                        <h6 class="fw-bold text-primary text-uppercase mb-3 text-center" style="font-size: 0.85em; letter-spacing: 1.5px;">🛡️ Conciliación de Retorno & Auditoría de Cuotas Quincenales (Modelo de Paridad)</h6>
+                        <div style="background-color: #f8f9fa; border-radius: 16px; padding: 20px; border: 1px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                            <table class="table table-sm table-hover table-borderless mb-0 text-start align-middle" style="font-size: 0.92rem; line-height: 1.4; width: 100%;">
+                                <thead>
+                                    <tr class="text-secondary font-weight-bold" style="border-bottom: 2px solid #cbd5e1; font-size: 0.82rem;">
+                                        <th style="width: 25%;">FASE DE COBRO</th>
+                                        <th style="width: 25%;">CÁLCULO NOMINAL</th>
+                                        <th style="width: 30%;">TASA LIQUIDACIÓN</th>
+                                        <th class="text-end" style="width: 20%;">RETORNO ($)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Flujos Brutos Quincena a Quincena -->
+                                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                                        <td class="fw-semibold text-dark">🟢 Inicial (Día 0)</td>
+                                        <td id="vba_calc_i">---</td>
+                                        <td id="vba_tasa_i" class="text-muted">---</td>
+                                        <td class="text-end fw-bold text-dark font-monospace" id="vba_usd_i">$ 0.00</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                                        <td class="fw-semibold text-dark">🔵 Cuota 1 (Día 14)</td>
+                                        <td id="vba_calc_q1">---</td>
+                                        <td id="vba_tasa_q1" class="text-muted">---</td>
+                                        <td class="text-end fw-bold text-dark font-monospace" id="vba_usd_q1">$ 0.00</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                                        <td class="fw-semibold text-dark">🔵 Cuota 2 (Día 28)</td>
+                                        <td id="vba_calc_q2">---</td>
+                                        <td id="vba_tasa_q2" class="text-muted">---</td>
+                                        <td class="text-end fw-bold text-dark font-monospace" id="vba_usd_q2">$ 0.00</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #cbd5e1;">
+                                        <td class="fw-semibold text-dark">🔵 Cuota 3 (Día 42)</td>
+                                        <td id="vba_calc_q3">---</td>
+                                        <td id="vba_tasa_q3" class="text-muted">---</td>
+                                        <td class="text-end fw-bold text-dark font-monospace" id="vba_usd_q3">$ 0.00</td>
+                                    </tr>
+                                    
+                                    <!-- Fila de Retorno Bruto -->
+                                    <tr class="fw-bold" style="background-color: #f1f5f9; border-bottom: 2px solid #94a3b8;">
+                                        <td colspan="3" class="text-dark py-2" style="font-size: 0.85rem;">💰 TOTAL RETORNO BRUTO REPOSITORIO:</td>
+                                        <td class="text-end text-primary font-monospace py-2" id="vba_total_usd" style="font-size: 1rem;">$ 0.00</td>
+                                    </tr>
+                                    
+                                    <!-- Bloque Deducciones Fiscales / Comerciales -->
+                                    <tr>
+                                        <td class="text-muted">🔴 IVA en Ventas (16%)</td>
+                                        <td class="text-muted" id="ded_iva_bs">---</td>
+                                        <td class="text-muted">Monto Base / 1.16</td>
+                                        <td class="text-end text-danger font-monospace" id="ded_iva_usd">-$ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">🔴 Anticipo ISLR (1%)</td>
+                                        <td class="text-muted" id="ded_islr_bs">---</td>
+                                        <td class="text-muted">Monto Base / 1.16</td>
+                                        <td class="text-end text-danger font-monospace" id="ded_islr_usd">-$ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">🔴 Patente Municipal (3%)</td>
+                                        <td class="text-muted" id="ded_patente_bs">---</td>
+                                        <td class="text-muted">Monto Base / 1.16</td>
+                                        <td class="text-end text-danger font-monospace" id="ded_patente_usd">-$ 0.00</td>
+                                    </tr>
+                                    <tr style="border-bottom: 2px solid #1e3a8a;">
+                                        <td class="text-muted">🔴 Comisión Cashea (4%)</td>
+                                        <td class="text-muted" id="ded_cashea_bs">---</td>
+                                        <td class="text-muted">Sobre PVP Full</td>
+                                        <td class="text-end text-danger font-monospace" id="ded_cashea_usd">-$ 0.00</td>
+                                    </tr>
+                                    
+                                    <!-- Resultado Neto Premium Destacado -->
+                                    <tr style="background-color: #e0f2fe;">
+                                        <td colspan="3" class="fw-bold text-dark py-2" style="font-size: 0.95rem;">🏆 TOTAL NETO REAL RECUPERADO EN CAJA:</td>
+                                        <td class="text-end fw-bold text-success font-monospace py-2" id="vba_neto_usd" style="font-size: 1.15rem;">$ 0.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-3 stat-box">
-                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Factor G15 (Gap)</div>
-                        <div class="h4 mb-0 text-primary fw-bold" id="res_g15" style="font-size: 1.25rem;">---</div>
-                    </div>
-                    <div class="col-6 col-md-3 stat-box">
-                        <div class="small text-muted text-uppercase mb-2" style="font-size: 0.75em; letter-spacing: 0.5px; font-weight: 600;">Brecha de Riesgo</div>
-                        <div class="h4 mb-0 text-danger fw-bold" id="res_brecha" style="font-size: 1.25rem;">---</div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -521,7 +610,7 @@
     </div>
 
     <script>
-        // Inyectamos las constantes de regresión lineal desde Django
+        // Inyectamos las constantes de regresión lineal de 91 días desde Django
         const m_bcv = {{ proy.m_bcv|stringformat:"f" }}; 
         const b_bcv = {{ proy.b_bcv|stringformat:"f" }};
         const m_bin = {{ proy.m_bin|stringformat:"f" }};
@@ -531,10 +620,10 @@
         const tasa_bcv_h = {{ tasa_actual.bcv_rate|stringformat:"f" }};
         const tasa_bin_h = {{ tasa_actual.binance_rate|stringformat:"f" }};
         
-        // TRAPAMOS EL FACTOR ADIMENSIONAL REAL DESDE PYTHON (Tu valor_medio)
+        // El Factor G15 real adimensional que viene de logic.py (Sin la división errónea)
         const g15 = {{ g15_real|stringformat:"f" }}; 
 
-     function simular() {
+        function simular() {
             const repo_usd = parseFloat(document.getElementById('monto_usd').value) || 0;
             const dias = parseInt(document.getElementById('dias_f').value);
             
@@ -543,9 +632,7 @@
                 return;
             }
 
-            // =====================================================================
-            // 1. DINÁMICA DEL HORIZONTE SELECCIONADO (Para las métricas inferiores)
-            // =====================================================================
+            // --- 1. MANEJO DEL HORIZONTE DE TIEMPO SELECCIONADO ---
             let bcv_f, bin_f;
             if (dias === 0) {
                 bcv_f = tasa_bcv_h;
@@ -556,10 +643,7 @@
                 bin_f = (m_bin * x_futuro) + b_bin;
             }
 
-            // =====================================================================
-            // 2. ENTORNO FIJO A 42 DÍAS (Para el Blindaje de Precios Cashea)
-            // Fijamos x_cashea a 133 (91 históricos + 42 futuros) para evitar distorsiones
-            // =====================================================================
+            // --- 2. ENTORNO FIJO A 42 DÍAS PARA EL PRECIO PROTEGIDO CASHEA ---
             const x_cashea = 91 + 42;
             const bcv_cashea = (m_bcv * x_cashea) + b_bcv;
             const bin_cashea = (m_bin * x_cashea) + b_bin;
@@ -569,10 +653,10 @@
             const base_cashea_o = base_cashea_f; 
 
             // =====================================================================
-            // MATEMÁTICA ANCLA: EJECUCIÓN ESCRITA AL HORIZONTE DE PROTECCIÓN
+            // 3. MATEMÁTICA PURA DE LAS TARJETAS GRANDES RESGUARDADAS
             // =====================================================================
             
-            // Tarjeta 1 y 2: Contado Cash y BCV (Se calculan con la tasa SPOT fija de HOY)
+            // Tarjeta 1 y 2: Contados (Tasa SPOT de hoy)
             const p_contado_bcv = (repo_usd * tasa_bin_h) / tasa_bcv_h;
             const p_contado_bcv_bs = p_contado_bcv * tasa_bcv_h;
 
@@ -585,39 +669,107 @@
             // Tarjeta 4: Cashea DCTO (Forzado a tasas de 42 días)
             const p_prot_offer = (base_cashea_o * bin_cashea / bcv_cashea) * g15;
             const desc_val = (p_prot_offer - base_cashea_o) / p_prot_offer;
-            
             const pvp_dcto = (p_prot_offer / 2) + ((p_prot_offer / 2) * 1.018 * (1 - desc_val));
             const inicial_dcto = (p_prot_offer / 2) * 1.018 * (1 - desc_val);
             const cuota_dcto = (p_prot_offer / 2) / 3;
 
-            // =====================================================================
-            // INYECCIÓN VISUAL RECALIBRADA EN LA MATRIZ
-            // =====================================================================
-            
-            // Tarjeta 1: Contado Cash
+            // INYECCIÓN EN TARJETAS SUPERIORES EN DÓLARES
             document.getElementById('calc_cash').innerText = '$ ' + repo_usd.toFixed(2);
-
-            // Tarjeta 2: Contado BCV
             document.getElementById('calc_bcv_usd').innerText = '$ ' + p_contado_bcv.toFixed(2);
             document.getElementById('calc_bcv_bs').innerText = 'Bs. ' + p_contado_bcv_bs.toLocaleString('es-VE', {minimumFractionDigits: 2});
-
-            // Tarjeta 3: Cashea FULL (Muestra los bolívares calculados a la tasa proyectada del horizonte Cashea)
+            
             document.getElementById('calc_full_usd').innerText = '$ ' + pvp_full.toFixed(2);
             document.getElementById('calc_full_bs').innerText = 'Bs. ' + (pvp_full * bcv_cashea).toLocaleString('es-VE', {minimumFractionDigits: 2});
             document.getElementById('calc_full_cuotas').innerText = 'Inicial: $' + inicial_full.toFixed(2) + ' + 3Q de $' + cuota_full.toFixed(2);
 
-            // Tarjeta 4: Cashea DCTO (Muestra los bolívares calculados a la tasa proyectada del horizonte Cashea)
             document.getElementById('calc_dcto_usd').innerText = '$ ' + pvp_dcto.toFixed(2);
             document.getElementById('calc_dcto_bs').innerText = 'Bs. ' + (pvp_dcto * bcv_cashea).toLocaleString('es-VE', {minimumFractionDigits: 2});
             document.getElementById('calc_dcto_cuotas').innerText = 'Inicial: $' + inicial_dcto.toFixed(2) + ' + 3Q de $' + cuota_dcto.toFixed(2);
 
-            // Actualizamos Métricas Inferiores de Soporte DINÁMICAS (Según el selector)
+            // =====================================================================
+            // 4. MATEMÁTICA DE AUDITORÍA QUINCENAL DESGLOSADA (ALA DERECHA)
+            // =====================================================================
+            const bcv_14 = (m_bcv * (91 + 14)) + b_bcv;
+            const bin_14 = (m_bin * (91 + 14)) + b_bin;
+            const bcv_28 = (m_bcv * (91 + 28)) + b_bcv;
+            const bin_28 = (m_bin * (91 + 28)) + b_bin;
+            const bcv_42 = (m_bcv * (91 + 42)) + b_bcv;
+            const bin_42 = (m_bin * (91 + 42)) + b_bin;
+
+            const bs_inicial = inicial_full * tasa_bcv_h;
+            const bs_cuota1  = cuota_full * bcv_14;
+            const bs_cuota2  = cuota_full * bcv_28;
+            const bs_cuota3  = cuota_full * bcv_42;
+
+            const usd_recuperado_i  = bs_inicial / tasa_bin_h;
+            const usd_recuperado_q1 = bs_cuota1 / bin_14;
+            const usd_recuperado_q2 = bs_cuota2 / bin_28;
+            const usd_recuperado_q3 = bs_cuota3 / bin_42;
+            const total_usd_bruto = usd_recuperado_i + usd_recuperado_q1 + usd_recuperado_q2 + usd_recuperado_q3;
+
+            // Deducciones Fiscales Día Cero
+            const factor_triangulacion = tasa_bcv_h / tasa_bin_h;
+            const iva_bs = (pvp_full / 1.16) * 0.16;
+            const iva_usd = iva_bs * factor_triangulacion;
+            const islr_bs = (pvp_full / 1.16) * 0.01;
+            const islr_usd = islr_bs * factor_triangulacion;
+            const patente_bs = (pvp_full / 1.16) * 0.03;
+            const patente_usd = patente_bs * factor_triangulacion;
+            const comision_cashea_bs = pvp_full * 0.04;
+            const comision_cashea_usd = comision_cashea_bs * factor_triangulacion;
+
+            const total_usd_neto_real = total_usd_bruto - (iva_usd + islr_usd + patente_usd + comision_cashea_usd);
+
+            // Inyección explicática quincenal
+            document.getElementById('vba_calc_i').innerText = '$ ' + inicial_full.toFixed(2) + ' × Bs. ' + tasa_bcv_h.toFixed(2);
+            document.getElementById('vba_tasa_i').innerText = 'Bs. ' + bs_inicial.toLocaleString('es-VE', {minimumFractionDigits: 2}) + ' / Binance Hoy: ' + tasa_bin_h.toFixed(2);
+            document.getElementById('vba_usd_i').innerText = '$ ' + usd_recuperado_i.toFixed(2);
+
+            document.getElementById('vba_calc_q1').innerText = '$ ' + cuota_full.toFixed(2) + ' × Bs. ' + bcv_14.toFixed(2);
+            document.getElementById('vba_tasa_q1').innerText = 'Bs. ' + bs_cuota1.toLocaleString('es-VE', {minimumFractionDigits: 2}) + ' / Binance F(14): ' + bin_14.toFixed(2);
+            document.getElementById('vba_usd_q1').innerText = '$ ' + usd_recuperado_q1.toFixed(2);
+
+            document.getElementById('vba_calc_q2').innerText = '$ ' + cuota_full.toFixed(2) + ' × Bs. ' + bcv_28.toFixed(2);
+            document.getElementById('vba_tasa_q2').innerText = 'Bs. ' + bs_cuota2.toLocaleString('es-VE', {minimumFractionDigits: 2}) + ' / Binance F(28): ' + bin_28.toFixed(2);
+            document.getElementById('vba_usd_q2').innerText = '$ ' + usd_recuperado_q2.toFixed(2);
+
+            document.getElementById('vba_calc_q3').innerText = '$ ' + cuota_full.toFixed(2) + ' × Bs. ' + bcv_42.toFixed(2);
+            document.getElementById('vba_tasa_q3').innerText = 'Bs. ' + bs_cuota3.toLocaleString('es-VE', {minimumFractionDigits: 2}) + ' / Binance F(42): ' + bin_42.toFixed(2);
+            document.getElementById('vba_usd_q3').innerText = '$ ' + usd_recuperado_q3.toFixed(2);
+
+            document.getElementById('vba_total_usd').innerText = '$ ' + total_usd_bruto.toFixed(2);
+
+            // Deducciones e Impuestos
+            document.getElementById('ded_iva_bs').innerText = 'Bs. ' + (iva_bs * tasa_bcv_h).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('ded_iva_usd').innerText = '-$ ' + iva_usd.toFixed(2);
+            document.getElementById('ded_islr_bs').innerText = 'Bs. ' + (islr_bs * tasa_bcv_h).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('ded_islr_usd').innerText = '-$ ' + islr_usd.toFixed(2);
+            document.getElementById('ded_patente_bs').innerText = 'Bs. ' + (patente_bs * tasa_bcv_h).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('ded_patente_usd').innerText = '-$ ' + patente_usd.toFixed(2);
+            document.getElementById('ded_cashea_bs').innerText = 'Bs. ' + (comision_cashea_bs * tasa_bcv_h).toLocaleString('es-VE', {minimumFractionDigits: 2});
+            document.getElementById('ded_cashea_usd').innerText = '-$ ' + comision_cashea_usd.toFixed(2);
+
+            // Utilidad Neta Real Final
+            document.getElementById('vba_neto_usd').innerText = '$ ' + total_usd_neto_real.toFixed(2);
+
+            // --- 5. METRICAS INFERIORES DINÁMICAS (Según selector de días) ---
             const g15_f = bin_f / bcv_f;
             document.getElementById('res_bcv').innerText = 'Bs. ' + bcv_f.toFixed(2);
             document.getElementById('res_bin').innerText = 'Bs. ' + bin_f.toFixed(2);
             document.getElementById('res_g15').innerText = g15_f.toFixed(4);
             document.getElementById('res_brecha').innerText = ((g15_f - 1) * 100).toFixed(2) + '%';
         }
+
+        function limpiarUI() {
+            document.getElementById('calc_cash').innerText = '$ 0.00';
+            document.getElementById('calc_bcv_usd').innerText = '$ 0.00';
+            document.getElementById('calc_full_usd').innerText = '$ 0.00';
+            document.getElementById('calc_dcto_usd').innerText = '$ 0.00';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            simular();
+        });    
 
         function limpiarUI() {
             document.getElementById('calc_cash').innerText = '$ 0.00';
