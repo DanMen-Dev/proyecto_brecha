@@ -21,8 +21,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 6. Copiamos todo el código de la App a la caja
 COPY . /app/
 
+# 6.5 Forzamos la recolección de archivos estáticos optimizados antes de arrancar
+RUN python manage.py collectstatic --noinput
+
 # 7. Exponemos el puerto estándar de ejecución
 EXPOSE 8000
 
-# 8. Comando por defecto para encender el servidor de producción (Gunicorn)
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--insecure"]
+# 8. Comando por defecto optimizado para producción con Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "core.wsgi:application"]
