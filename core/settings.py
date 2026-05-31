@@ -35,6 +35,11 @@ ALLOWED_HOSTS = ['brecha-cero.com', 'www.brecha-cero.com', '127.0.0.1', 'localho
 
 #DEBUG = False
 
+# --- ORÍGENES DE CONFIANZA PARA FORMULARIOS SEGUROS (HTTPS) ---
+CSRF_TRUSTED_ORIGINS = [
+    'https://brecha-cero.com',
+    'https://www.brecha-cero.com'
+]
 
 # Application definition
 
