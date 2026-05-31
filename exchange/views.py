@@ -85,21 +85,21 @@ def dashboard(request):
         g15_real_valor = 1.00
 
 
-    # --- BIFURCACIÓN DE ENTORNOS EN TIEMPO REAL ---
-    grafico_data = None
-    datos_grafico_json = "{}" # JSON vacío por defecto
+    # # --- BIFURCACIÓN DE ENTORNOS EN TIEMPO REAL ---
+    # grafico_data = None
+    # datos_grafico_json = "{}" # JSON vacío por defecto
 
-    if settings.DEBUG:
-        # 💻 EN LAPTOP: Mantenemos lógica actual intacta
+    # if settings.DEBUG:
+    #     # 💻 EN LAPTOP: Mantenemos lógica actual intacta
         grafico_data = generar_grafico_base64(tasas_cron)
-    else:
+    # else:
 
-        # 🚀 EN HETZNER (PROD): Activamos el JSON ultra-ligero de milisegundos
-        datos_grafico_json = json.dumps({
-            'fechas': [t.date.strftime('%d/%m') for t in tasas_cron],
-            'bcv': bcv_list,
-            'binance': binance_list
-        })  
+    #     # 🚀 EN HETZNER (PROD): Activamos el JSON ultra-ligero de milisegundos
+    #     datos_grafico_json = json.dumps({
+    #         'fechas': [t.date.strftime('%d/%m') for t in tasas_cron],
+    #         'bcv': bcv_list,
+    #         'binance': binance_list
+    #     })  
 
     # Preparar la tabla de análisis (Últimos 15 días)
     analisis_data = []
@@ -120,9 +120,9 @@ def dashboard(request):
         },
         'g15_real': g15_real_valor, # El escudo purificado
         'tasa_actual': tasas_qs.first(),
-        'es_produccion': not settings.DEBUG, # <--- Enviamos esta bandera al HTML
+        #'es_produccion': not settings.DEBUG, # <--- Enviamos esta bandera al HTML
         'grafico_offline': grafico_data,
-        'datos_grafico': datos_grafico_json,     # Se enviará sólo en Hetzner  
+        #'datos_grafico': datos_grafico_json,     # Se enviará sólo en Hetzner  
     })
 
     #=====================================================================================

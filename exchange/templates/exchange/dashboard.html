@@ -549,16 +549,6 @@
         <!-- Grafica de Tasas ----------------------------------------->
 
  
-
-        {% if es_produccion %}
-            <!-- CONTAINER SÓLO PARA PRODUCCIÓN (HETZNER) -->
-            <div class="chart-container" style="position: relative; height:40vh; width:100%">
-                <canvas id="graficoTendencia"></canvas>
-            </div>
-            <!-- Cargamos la librería externa por CDN sólo en producción -->
-            <!-- <script src="https://jsdelivr.net"></script> -->
-            <script src="{% static 'js/chart.sample.min.js' %}"></script>
-        {% else %}
             <div class="col-md-8"> 
                 <div class="card shadow"> 
                     <div class="card-body text-center" style="min-height: 400px; padding: 10px;">
@@ -571,7 +561,7 @@
                     </div> 
                 </div> 
             </div>  
-        {% endif %}                                                                    
+                                                                 
 
        <!-- Buscas tu contenedor del gráfico y lo dejas apuntando al archivo fijo -->
        <!-- <div class="text-center p-3 bg-white rounded-4 shadow-sm border mb-5">
