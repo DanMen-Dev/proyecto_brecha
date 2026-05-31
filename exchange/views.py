@@ -20,6 +20,9 @@ from django.contrib import messages
 import numpy as np
 from django.conf import settings  # <--- IMPORTANTE: Importar settings
 import json
+import matplotlib
+matplotlib.use('Agg')  # <--- CORRECCIÓN DE ORO: Configura Matplotlib para servidores Linux sin pantalla
+import matplotlib.pyplot as plt
 
 
 def register(request):
