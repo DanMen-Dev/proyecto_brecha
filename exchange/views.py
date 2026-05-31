@@ -91,7 +91,7 @@ def dashboard(request):
 
     # if settings.DEBUG:
     #     # 💻 EN LAPTOP: Mantenemos lógica actual intacta
-        grafico_data = generar_grafico_base64(tasas_cron)
+    grafico_data = generar_grafico_base64(tasas_cron)
     # else:
 
     #     # 🚀 EN HETZNER (PROD): Activamos el JSON ultra-ligero de milisegundos
