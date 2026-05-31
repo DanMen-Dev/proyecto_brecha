@@ -156,3 +156,8 @@ mimetypes.add_type("application/javascript", ".js", True)
 
 # 1. El STATIC_ROOT es exclusivo para que collectstatic meta la basura en producción 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # <--- CAMBIAMOS 'static' por 'staticfiles'
+
+# --- CONFIGURACIÓN DE EMERGENCIA PARA HTTP (SIN SSL) ---
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
