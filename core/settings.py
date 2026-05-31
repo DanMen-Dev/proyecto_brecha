@@ -31,7 +31,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # core/settings.py
 # Añadimos la IP de Oregón para que Django acepte las conexiones directas
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '5.78.179.129', 'hierroenlinea.com']
+ALLOWED_HOSTS = ['brecha-cero.com', 'www.brecha-cero.com', '127.0.0.1', 'localhost', '5.78.179.129', 'hierroenlinea.com']
 
 #DEBUG = False
 
