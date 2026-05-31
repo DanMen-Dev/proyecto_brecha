@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -555,7 +556,8 @@
                 <canvas id="graficoTendencia"></canvas>
             </div>
             <!-- Cargamos la librería externa por CDN sólo en producción -->
-            <script src="https://jsdelivr.net"></script>
+            <!-- <script src="https://jsdelivr.net"></script> -->
+            <script src="{% static 'js/chart.sample.min.js' %}"></script>
         {% else %}
             <div class="col-md-8"> 
                 <div class="card shadow"> 
