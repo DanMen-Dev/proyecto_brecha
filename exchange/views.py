@@ -57,7 +57,8 @@ def home(request):
 # El Dashboard ahora es PRIVADO
 @login_required
 def dashboard(request):
-    tasas_qs = DailyRate.objects.all().order_by('-date')[:91]
+    #tasas_qs = DailyRate.objects.all().order_by('-date')[:91]
+    tasas_qs = DailyRate.objects.values('date', 'bcv_rate', 'binance_rate', 'gap_percentage').order_by('-date')[:91]
     if not tasas_qs.exists():
         return render(request, 'exchange/dashboard.html', {'error': 'Sin datos'})
 
