@@ -2,11 +2,13 @@ import os
 import django
 import pandas as pd
 import numpy as np
+from exchange.models import DailyRate
+# --- EL ABRAZO DE LA LIBRERÍA: IMPORTAMOS LA FUNCIÓN DEL GRÁFICO ---
+from exchange.logic import generar_grafico_base64
+from exchange.models import DailyRate
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
-
-from exchange.models import DailyRate
 
 def importar_desde_csv(file_path):
     if not os.path.exists(file_path):
@@ -75,5 +77,21 @@ def importar_desde_csv(file_path):
     print("\n🏁 Pipeline de Variación Intertemporal Concluido.")
 
 if __name__ == "__main__":
+    # 1. Corre la inyección de los datos del CSV
     importar_desde_csv('datos_historicos.csv')
+
+    # # 2. SEÑAL DE CONTROL: Extraemos los últimos 91 días ordenados cronológicamente
+    # print("\n📸 Generando captura estática del gráfico para erradicar latencia...")
+    # tasas_qs = DailyRate.objects.all().order_by('-date')[:91]
+    
+    # if tasas_qs.exists():
+    #     tasas_cron = tasas_qs[::-1] # Pasado a presente
+    #     # Generamos y guardamos el gráfico físico en tu carpeta 'static/'
+    #     generar_grafico_base64(tasas_cron)
+    #     print("✅ Foto fija del monitor financiero consolidada con éxito.")
+    # else:
+    #     print("⚠️ No hay datos en la BD para dibujar el monitor.")
+
+
+    
 

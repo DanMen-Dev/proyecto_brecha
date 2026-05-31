@@ -5,6 +5,8 @@ matplotlib.use('Agg') # Evita que intente abrir una ventana gráfica en el servi
 import matplotlib.pyplot as plt
 import io
 import base64
+import os
+from django.conf import settings
 
 
 def calcular_ajuste_prediccion(tasas_queryset):
@@ -191,6 +193,8 @@ def generar_grafico_base64(tasas_queryset):
     
     plt.tight_layout()
 
+#======== Opcion para generar grafico en cada click ======================
+
     # 4. Compresión binaria a texto Base64
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png', dpi=110)
@@ -200,3 +204,19 @@ def generar_grafico_base64(tasas_queryset):
     plt.close()
 
     return base64.b64encode(image_png).decode('utf-8')
+
+#=============================================================
+    #     # --- EL CAMBIO QUIRÚRGICO: GUARDAR EN DISCO ---
+    # # Definimos la ruta física dentro de carpeta 'static'
+    # ruta_static = os.path.join(settings.BASE_DIR, 'static')
+    # if not os.path.exists(ruta_static):
+    #     os.makedirs(ruta_static)
+        
+    # ruta_archivo = os.path.join(ruta_static, 'grafico_monitor.png')
+    
+    # # Guardamos la imagen reemplazando la anterior
+    # plt.savefig(ruta_archivo, format='png', dpi=110)
+    # plt.close()
+    
+    # print("📈 Gráfico de monitoreo actualizado con éxito en la carpeta static.")
+    # return True

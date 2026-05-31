@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Brecha Cero{% endblock %}</title>
+    <!-- Enlace a CSS Estático -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">    
+
+    <!-- Bloque para estilos específicos de cada página -->
+    {% block extra_css %}{% endblock %}
+
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Menú de navegación común -->
+        </nav>
+    </header>
+
+    <main>
+        <!-- Bloque principal que será reemplazado -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Pie de página común -->
+    </footer>
+
+    <!-- JS Estático -->
+    <!-- <script src="{% static 'js/script.js' %}"></script> -->
+</body>
+</html>

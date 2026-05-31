@@ -550,7 +550,7 @@
         <div class="col-md-8"> 
             <div class="card shadow"> 
                 <div class="card-body text-center" style="min-height: 400px; padding: 10px;">
-                    {% if grafico_offline %}
+                    {% if grafico_offline %}                                              
                         <!-- Render directo del texto Base64 como imagen pura -->
                         <img src="data:image/png;base64,{{ grafico_offline }}" alt="Tendencia de Brecha Cambiaria" class="img-fluid" style="width: 100%; height: auto; border-radius: 4px;">
                     {% else %}
@@ -558,7 +558,15 @@
                     {% endif %}
                 </div> 
             </div> 
-        </div> 
+        </div>                                                                       
+
+       <!-- Buscas tu contenedor del gráfico y lo dejas apuntando al archivo fijo -->
+       <!-- <div class="text-center p-3 bg-white rounded-4 shadow-sm border mb-5">
+            {% load static %}
+            <img src="{% static 'grafico_monitor.png' %}?v={{ tasa_actual.id }}" alt="Monitor de Cobertura Causal" class="img-fluid" style="border-radius: 12px; max-width: 100%; height: auto;">
+        </div>                                                                       -->  
+
+    <!------------------------------------------------------------------------->                                                                                    
 
     </div>
 
@@ -760,43 +768,59 @@
             document.getElementById('res_brecha').innerText = ((g15_f - 1) * 100).toFixed(2) + '%';
         }
 
-        function limpiarUI() {
-            document.getElementById('calc_cash').innerText = '$ 0.00';
-            document.getElementById('calc_bcv_usd').innerText = '$ 0.00';
-            document.getElementById('calc_full_usd').innerText = '$ 0.00';
-            document.getElementById('calc_dcto_usd').innerText = '$ 0.00';
+        // ==========================================
+        // 1. FUNCIONES GLOBALES (Disponibles para HTML y botones)
+        // ==========================================
+
+        function limpiarUI() { 
+            // Usamos condicionales simples por si acaso un ID no existe en móvil
+            if(document.getElementById('calc_cash')) document.getElementById('calc_cash').innerText = '$ 0.00'; 
+            if(document.getElementById('calc_bcv_usd')) document.getElementById('calc_bcv_usd').innerText = '$ 0.00'; 
+            if(document.getElementById('calc_full_usd')) document.getElementById('calc_full_usd').innerText = '$ 0.00'; 
+            if(document.getElementById('calc_dcto_usd')) document.getElementById('calc_dcto_usd').innerText = '$ 0.00'; 
         }
 
+        function abrirPaywall() { 
+            const modal = document.getElementById('paywallModal'); 
+            if (modal) { 
+                modal.style.display = 'block'; 
+                modal.classList.add('show'); 
+            } 
+        }
+
+        function cerrarPaywall() { 
+            const modal = document.getElementById('paywallModal'); 
+            if (modal) { 
+                modal.style.display = 'none'; 
+                modal.classList.remove('show'); 
+            } 
+        }
+
+        // ==========================================
+        // 2. BLOQUE CORRECTOR UNIVERSAL (Móvil y Escritorio)
+        // ==========================================
         document.addEventListener("DOMContentLoaded", function() {
-            simular();
-        });    
+            var inputMonto = document.getElementById('monto_usd');
+            var inputDias = document.getElementById('dias_f');
 
-        function limpiarUI() {
-            document.getElementById('calc_cash').innerText = '$ 0.00';
-            document.getElementById('calc_bcv_usd').innerText = '$ 0.00';
-            document.getElementById('calc_full_usd').innerText = '$ 0.00';
-            document.getElementById('calc_dcto_usd').innerText = '$ 0.00';
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            simular();
-
-        function abrirPaywall() {
-            const modal = document.getElementById('paywallModal');
-            if (modal) {
-                modal.style.display = 'block';
-                modal.classList.add('show');
+            // Escuchadores de eventos reactivos para pantallas táctiles
+            if (inputMonto) {
+                inputMonto.addEventListener('input', function() {
+                    if (typeof simular === 'function') simular();
+                });
+                inputMonto.addEventListener('keyup', function() {
+                    if (typeof simular === 'function') simular();
+                });
             }
-        }
-
-        function cerrarPaywall() {
-            const modal = document.getElementById('paywallModal');
-            if (modal) {
-                modal.style.display = 'none';
-                modal.classList.remove('show');
+            
+            if (inputDias) {
+                inputDias.addEventListener('change', function() {
+                    if (typeof simular === 'function') simular();
+                });
             }
-        }
-
+            
+            // Ejecutar el primer cálculo automático al terminar de cargar la página
+            if (typeof simular === 'function') simular();
         });
     </script>
 

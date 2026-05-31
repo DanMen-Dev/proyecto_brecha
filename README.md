@@ -1,4 +1,4 @@
-# 🏗️ HierroEnLinea (SaaS de Blindaje Financiero & Pricing Predictivo)
+# 🏗️ Brecha Cero (SaaS de Blindaje Financiero & Pricing Predictivo)
 
 ![Python](https://shields.io)
 ![Django](https://shields.io)
@@ -34,8 +34,7 @@ La plataforma no especula con los precios; aplica rigor estadístico. El sistema
 El script calcula un **eje X futuro ($x_{\text{futuro}} = 91 + \text{días}$)** para proyectar los valores nominales exactos al día 105, 119 o 133 (horizonte máximo de protección de 42 días), obteniendo las variables `bcv_f` y `bin_f`.
 
 ### B. Factor de Cobertura Causal (G15)
-El factor **G15** representa el valor medio proyectado del GAP cambiario intertemporal. Evalúa la ecuación de la recta de la brecha desde el punto de partida hasta el día de la cobranza futura, devolviendo un coeficiente adimensional que blinda la estructura de costos:
-$$\text{Factor G15} = \frac{\text{Valor Inicio} + \text{Valor Final (Día 131)}}{2}$$
+El factor **G15** representa el valor medio proyectado del GAP cambiario intertemporal. Evalúa la ecuación de la recta de la brecha desde el punto de partida hasta el día de la cobranza futura, devolviendo un coeficiente adimensional que blinda la estructura de costos, dado por la recta ($y = mx + b$) y evaluado en el dia 23 aprox luego del dia O o dia de venta.
 
 ### C. Matriz de Pricing Multiescenario
 Para cada artículo del inventario, la app calcula en milisegundos 4 estructuras de precios en paralelo:
@@ -99,7 +98,7 @@ La plataforma implementa un modelo **Freemium con pasarela de activación por co
 ---
 LICENSE
 
-Copyright (c) 2026 Daniel Mendoza (HierroEnLinea). Licensed under the MIT License.
+Copyright (c) 2026 Daniel Mendoza (Brecha Cero). Licensed under the MIT License.
 
 *Desarrollado con rigor matemático e ingeniería de software para la sostenibilidad empresarial.*
 

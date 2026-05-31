@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import mimetypes
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-roq+!t37^cr5n084u&%u#3b_h9z0_u7ytl96t1wpuj(=$9$mkp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #ALLOWED_HOSTS = []
 
@@ -129,14 +130,27 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
+# Configuración estándar
+STATIC_URL = 'static/'
 
-STATIC_URL = '/static/'
-
-# 1. El STATIC_ROOT es exclusivo para que collectstatic meta la basura en producción 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # <--- CAMBIAMOS 'static' por 'staticfiles'
-
-# 2. El STATICFILES_DIRS es donde Django busca CSS locales durante el desarrollo (Si esta definido)
-# Asegúrar de que NO apunte a la misma carpeta de arriba
+# Le indicamos a Django exactamente qué carpeta física leer en local
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Aseguramos los buscadores nativos de archivos
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Forzar tipos MIME correctos en Windows (Crucial para corregir consola F12)
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("text/javascript", ".js", True)
+mimetypes.add_type("application/javascript", ".js", True)
+
+
+
+# 1. El STATIC_ROOT es exclusivo para que collectstatic meta la basura en producción 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # <--- CAMBIAMOS 'static' por 'staticfiles'

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include # Agregamos 'include' para los usuarios
-from exchange.views import home, dashboard, lista_precios_cashea, register, exportar_precios_pdf, cargar_csv, actualizar_tasas_manual, solicitar_pro 
+from exchange.views import home, dashboard, dashboard2, lista_precios_cashea, register, exportar_precios_pdf, cargar_csv, actualizar_tasas_manual, solicitar_pro 
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve # Librería nativa para servir en producción
@@ -21,5 +21,6 @@ urlpatterns = [
     path('actualizar-tasas/', actualizar_tasas_manual, name='actualizar_tasas'),
     path('solicitar-pro/', solicitar_pro, name='solicitar_pro'),
 
-]
+    path('dashboard2/', dashboard2, name='dashboard2'),  # El centro de mando
 
+]

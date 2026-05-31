@@ -32,7 +32,13 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-#===============================================================
+#================= Dashboard 2 ============================
+
+# Dashboard2 alternativo
+def dashboard2(request):
+    return render(request, 'exchange/dashboard2.html')
+
+#============================================================
 
 # La Home es pública (para atraer clientes)
 def home(request):
@@ -73,7 +79,7 @@ def dashboard(request):
         g15_real_valor = 1.00
 
     # Generamos el gráfico offline avanzado de doble eje
-    grafico_data = generar_grafico_base64(tasas_cron)
+    grafico_data = generar_grafico_base64(tasas_cron)     
 
     # Preparar la tabla de análisis (Últimos 15 días)
     analisis_data = []
@@ -94,7 +100,7 @@ def dashboard(request):
         },
         'g15_real': g15_real_valor, # El escudo purificado
         'tasa_actual': tasas_qs.first(),
-        'grafico_offline': grafico_data,
+        'grafico_offline': grafico_data,  
     })
 
     #=====================================================================================
