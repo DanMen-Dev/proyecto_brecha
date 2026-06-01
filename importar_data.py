@@ -1,14 +1,16 @@
 import os
 import django
-import pandas as pd
-import numpy as np
-from exchange.models import DailyRate
-# --- EL ABRAZO DE LA LIBRERÍA: IMPORTAMOS LA FUNCIÓN DEL GRÁFICO ---
-from exchange.logic import generar_grafico_base64
-from exchange.models import DailyRate
-
+# --- PRIMERO: Configurar Django ---
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
+
+# --- SEGUNDO: Librerías estándar y de terceros ---
+import pandas as pd
+import numpy as np
+
+# --- TERCERO: Tus modelos y lógica (Ahora sí van a funcionar) ---
+from exchange.models import DailyRate
+from exchange.logic import generar_grafico_base64
 
 def importar_desde_csv(file_path):
     if not os.path.exists(file_path):
