@@ -27,5 +27,5 @@ RUN python manage.py collectstatic --noinput
 # 7. Exponemos el puerto estándar de ejecución
 EXPOSE 8000
 
-# 8. Comando por defecto optimizado para producción con Gunicorn
+# 8. Comando por defecto universal (Inmune a bloqueos de hilos y compatible con Windows/Hetzner)
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--insecure"]

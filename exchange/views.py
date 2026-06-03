@@ -20,9 +20,9 @@ from django.contrib import messages
 import numpy as np
 from django.conf import settings  # <--- IMPORTANTE: Importar settings
 import json
-import matplotlib
-matplotlib.use('Agg')  # <--- CORRECCIÓN DE ORO: Configura Matplotlib para servidores Linux sin pantalla
-import matplotlib.pyplot as plt
+# import matplotlib
+# matplotlib.use('Agg')  # <--- CORRECCIÓN DE ORO: Configura Matplotlib para servidores Linux sin pantalla
+# import matplotlib.pyplot as plt
 
 
 def register(request):
@@ -129,7 +129,7 @@ def dashboard(request):
 
 # La Lista de Precios ahora es PRIVADA
 @login_required
-def lista_precios_cashea(request):
+def lista_precios_cashea(request):    
     # 1. Obtenemos la data del mercado (último trimestre)
     tasas_qs = DailyRate.objects.all().order_by('-date')[:91]
     if not tasas_qs.exists():
@@ -149,7 +149,13 @@ def lista_precios_cashea(request):
     #productos = Product.objects.all()
     productos = Product.objects.filter(user=request.user)
     lista_calculada = []
-    
+
+    # 🟢 OPTIMIZACIÓN: Calcular el factor una sola vez fuera del bucle
+    if bcv_futuro > 0:
+        factor_proyeccion = (binance_futuro / bcv_futuro) * g15
+    else:
+        factor_proyeccion = 1.0
+
     for p in productos:
         # --- BASES DE CÁLCULO ---
         # Si hay oferta en base de datos, manda la oferta, si no, el normal.
@@ -166,9 +172,15 @@ def lista_precios_cashea(request):
         precio_item_dolar_bcv = (base_cashea_modelo * binance_futuro / bcv_futuro) * g15
         precio_item_dolar_bcv_50 = precio_item_dolar_bcv / 2
         
-        # 2. CÁLCULO DEL DESCUENTO (Puro, sobre el valor del ítem)
-        # Descuento = (Diferencia entre Proyectado y Base) / Proyectado
-        descuento_decimal = (precio_item_dolar_bcv - base_cashea_modelo) / precio_item_dolar_bcv
+
+        # 🟢 CANDADO: Evitamos división por cero si el precio proyectado da 0
+        if precio_item_dolar_bcv > 0:
+            # 2. CÁLCULO DEL DESCUENTO (Puro, sobre el valor del ítem)
+            # Descuento = (Diferencia entre Proyectado y Base) / Proyectado
+            descuento_decimal = (precio_item_dolar_bcv - base_cashea_modelo) / precio_item_dolar_bcv
+        else:
+            descuento_decimal = 0.0
+
         
         # 3. INICIALES (Aquí es donde entra el IGTF)
         inicial_full = precio_item_dolar_bcv_50 * 1.018 # Mitad + IGTF
@@ -305,11 +317,16 @@ def exportar_precios_pdf(request):
     ]))
     
     elements.append(t)
+
     doc.build(elements)
     
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="Lista_Precios_{tasas_qs[0].date}.pdf"'
     response.write(buffer.getvalue())
+
+    # 🟢 CANDADO DE ORO: Cerramos el buffer para liberar la memoria del servidor
+    buffer.close() 
+    
     return response
 
 #=====================================================================================

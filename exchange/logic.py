@@ -2,13 +2,30 @@
 import numpy as np
 import matplotlib
 matplotlib.use('Agg') # Evita que intente abrir una ventana gráfica en el servidor
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
+from matplotlib.figure import Figure # <--- USAR ESTO EN LUGAR DE PLT
 import io
 import base64
 import os
 from django.conf import settings
+import time
 
+#------ DECORADOR ---------------------------------------
 
+def medir_tiempo(nombre_proceso):
+    """Decorador simple para imprimir en consola cuánto tarda una función."""
+    def decorador(func):
+        def envoltura(*args, **kwargs):
+            inicio = time.time()
+            resultado = func(*args, **kwargs)
+            fin = time.time()
+            print(f"⏱️ [CRONÓMETRO] '{nombre_proceso}' tardó: {fin - inicio:.4f} segundos")
+            return resultado
+        return envoltura
+    return decorador
+
+#-----------------------------------------------------
+@medir_tiempo("calcular_ajuste_prediccion")
 def calcular_ajuste_prediccion(tasas_queryset):
     registros = list(tasas_queryset)
     y, x = [], []
@@ -63,7 +80,7 @@ def calcular_ajuste_prediccion(tasas_queryset):
 
     #==================================================================================
 
-
+@medir_tiempo("proyectar_tasas_futuro")
 def proyectar_tasas_futuro(tasas_queryset):
     # 1. Extraemos las series de datos
     bcv_list = [float(t.bcv_rate) for t in tasas_queryset]
@@ -84,7 +101,7 @@ def proyectar_tasas_futuro(tasas_queryset):
     return tasa_bcv_proyectada, tasa_binance_proyectada
 
     #=========================================================================================
-
+@medir_tiempo("calculate_protection_price")
 def calculate_protection_price(base_price, current_bcv, current_binance, factor_dinamico):
     """
     Calcula el precio final usando el factor dinámico de la regresión.
@@ -96,6 +113,7 @@ def calculate_protection_price(base_price, current_bcv, current_binance, factor_
     return round(price_bcv_labeled, 2)
 
     #=========================================================================================
+@medir_tiempo("proyectar_escenario_personalizado")
 def proyectar_escenario_personalizado(tasas_queryset, dias_a_futuro):
     bcv_list = [float(t.bcv_rate) for t in tasas_queryset]
     binance_list = [float(t.binance_rate) for t in tasas_queryset]
@@ -153,16 +171,21 @@ def proyectar_escenario_personalizado(tasas_queryset, dias_a_futuro):
 #     return grafico_base64
 
     #===================== Grafica de ejes Dobles ======================================
-
+@medir_tiempo("generar_grafico_base64")
 def generar_grafico_base64(tasas_queryset):
+    if not tasas_queryset:
+        return None
+
     # 1. Extraemos la data completa de la BD (Orden cronológico)
     fechas = [t.date.strftime('%d/%m') for t in tasas_queryset]
     bcv = [float(t.bcv_rate) for t in tasas_queryset]
     binance = [float(t.binance_rate) for t in tasas_queryset]
-    gaps = [float(t.gap_percentage) * 100 for t in tasas_queryset] # En porcentaje (ej: 15.4)
+    gaps = [float(t.gap_percentage) * 100 for t in tasas_queryset]
 
-    # 2. Configuración de la figura principal (Eje Izquierdo - Tasas en Bs)
-    fig, ax1 = plt.subplots(figsize=(9, 4.5))
+    # 2. ENFOQUE ORIENTADO A OBJETOS: Creamos la figura y los ejes de forma aislada
+    # Reemplaza a: fig, ax1 = plt.subplots(...)
+    fig = Figure(figsize=(9, 4.5), dpi=110)
+    ax1 = fig.subplots()
     
     # Dibujamos las curvas reales de las tasas
     ax1.plot(fechas, bcv, label='Tasa BCV Real', color='#0d6efd', linewidth=2, alpha=0.8)
@@ -176,8 +199,8 @@ def generar_grafico_base64(tasas_queryset):
     ax2.set_ylabel('Brecha Cambiaria - GAP (%)', fontname='Segoe UI', fontweight='bold', color='#198754')
     ax2.tick_params(axis='y', labelcolor='#198754')
 
-    # Ajustes estéticos de alta costura corporativa
-    plt.title('Monitor de Cobertura Causal & Termómetro de Brecha (Trimestral)', fontsize=12, fontweight='bold', fontname='Segoe UI', pad=15)
+    # Ajustes estéticos (Usamos el objeto fig directamente en lugar de plt)
+    fig.suptitle('Monitor de Cobertura Causal & Termómetro de Brecha (Trimestral)', fontsize=12, fontweight='bold', fontname='Segoe UI', y=0.98)
     ax1.set_xlabel('Línea Temporal (Días del Periodo)', fontname='Segoe UI', labelpad=10)
     
     # Unificamos las leyendas de ambos ejes en una sola caja
@@ -187,21 +210,22 @@ def generar_grafico_base64(tasas_queryset):
     
     ax1.grid(True, linestyle='--', alpha=0.4, color='#90a4ae')
     
-    # Controlamos el amontonamiento del eje X (Muestra una etiqueta cada 10 días)
+    # Controlamos el amontonamiento del eje X
     ax1.set_xticks(np.arange(0, len(fechas), 10))
     ax1.set_xticklabels(fechas[::10], rotation=45, style='italic', fontsize=9)
     
-    plt.tight_layout()
-
-#======== Opcion para generar grafico en cada click ======================
+    fig.tight_layout()
 
     # 4. Compresión binaria a texto Base64
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png', dpi=110)
+    fig.savefig(buffer, format='png', bbox_inches='tight') # Eliminamos dependencia de plt
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-    plt.close()
+
+    # 5. EL CANDADO DE ORO DEFINITIVO
+    fig.clf() # Destruye el contenido de las capas internas y del twinx
+    del fig   # Borra el objeto de la memoria del hilo de Python
 
     return base64.b64encode(image_png).decode('utf-8')
 
